@@ -19,6 +19,7 @@ function SubMockitThread(props) {
     const bluish = {borderTopColor:'rgb(0, 173, 221)'}
     const [upVoteColor, setUpvoteColor] = useState()
     const [downVoteColor, setDownVoteColor] = useState()
+    const [userName, setUserName] = useState(props.user)
 
     useEffect (() =>{
         const user = auth.currentUser;
@@ -32,6 +33,16 @@ function SubMockitThread(props) {
              }
         }
     },[props.resetColor])
+
+    useEffect (() =>{
+      setVoteCount(props.votesTotal)
+  },[props.resetColor])
+
+  useEffect (() =>{
+
+    setUserName(props.user)
+    console.log(props.user)
+},[props.resetName])
 
 
  
@@ -155,7 +166,7 @@ function SubMockitThread(props) {
         </div>
 
         <div className='whoWhenAndWhere'>
-            submitted {props.postedAt} ago by <Link  className='subMockItLink' to={"/u/" + props.user}>{props.user}</Link> to <Link className='subMockItLink' to={"/m/" + props.subMockItName}>{props.subMockItName}</Link>
+            submitted {props.postedAt} ago by <Link  className='subMockItLink' to={"/u/" + props.user}>{userName}</Link> to <Link className='subMockItLink' to={"/m/" + props.subMockItName}>{props.subMockItName}</Link>
         </div>
 
         <div className='commentsAndSharing'>

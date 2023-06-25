@@ -6,7 +6,7 @@ import UserNavBar from './/userNavBar.js'
 import { onSnapshot, collection, useCollectionData, getDocs, getDoc, setDoc, doc, exists, } from 'firebase/firestore'
 import { useEffect, useState } from 'react';
 import Header from './header.js'
-import { getLengthOfTimeSincePosted } from './moreFunctions.js'
+import { getLengthOfTimeSincePosted, votesTotal } from './moreFunctions.js'
 
 function SubMockit(props) {
 
@@ -16,10 +16,7 @@ function SubMockit(props) {
 
     const [ sideBar, setSideBar] = useState('')
     const [ subMockitSubText, setSubMockitSubText] = useState('')
-    const votesTotal = (upvotes, downvotes) => {
-        let total = upvotes + downvotes;
-        return total;
-    }
+
      
     useEffect (() => {
         const collectionRef = collection(db, "subMockIts", subMockit, 'threads');
@@ -45,7 +42,7 @@ function SubMockit(props) {
                             id: thread.id,
                             threadPath: thread.ref.path,
                         }
-                         
+                         console.log("hi " + newThread.votesTotal)
                         updater.push(newThread)
                         setSubmockitInfo([...updater])
                        

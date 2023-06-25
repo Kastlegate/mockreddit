@@ -23,6 +23,7 @@ const [finishedLoading, setFinishedLoading] = useState(false)
 const [sideBar, setSideBar] = useState('')
 const [ subMockitSubText, setSubMockitSubText] = useState('')
 const [resetColor, setResetColor] = useState(1)
+const [resetName, setResetName] = useState(1)
 
 
 const votesTotal = (upvotes, downvotes) => {
@@ -259,7 +260,7 @@ const addRepliesToComment = (nestedCommentReplies, counter) =>{
 
 
 
-const firstRun = useEffect (() => {
+useEffect (() => {
 
 
     getDoc(doc(db, 'subMockIts', subMockit)).then(docSnap => {
@@ -281,23 +282,24 @@ const firstRun = useEffect (() => {
         //if to make sure the submockit does not already exist
         if (docSnap.exists()) {
             //nested docsnap to grab the username
-           
-                    const newThread = {
+                    const newThread = { 
                         linkAddress: docSnap.data().linkAddress,
                         linkText: docSnap.data().linkText,
                         postedAt: getLengthOfTimeSincePosted(docSnap.data().postedAt),
-                        postedBy: docSnap.data().userName,                 
+                        postedBy: docSnap.data().postedBy,                 
                         subMockItName: docSnap.data().subMockItName,
-                        // totalVotes: votesTotal(docSnap.data().upVoters.length, docSnap.data().downVoters.length),
+                        votesTotal: votesTotal(docSnap.data().upVoters.length, docSnap.data().downVoters.length),
                         id: docSnap.id,
                         upVoters: docSnap.data().upVoters,
                         downVoters: docSnap.data().downVoters,
                         commentsTotal: docSnap.data().commentsTotal,
                         threadPath: docSnap.ref.path
                     }
+                    console.log(newThread.postedBy)
                     setCurrentThread(newThread)
                     setCommentsCount(docSnap.data().commentsTotal)
                     setResetColor(2)
+                    setResetName(2)
   
                         
         } else {
@@ -308,68 +310,6 @@ const firstRun = useEffect (() => {
       
 }, [])
 
-// const initialVoteLoader = (element, userID) => {
-
-//     if(element.upVoters.indexOf(userID) > -1){
-//         let upvote = document.getElementById("upvote-" + element.id)
-//         upvote.style.borderBottomColor = 'orange'
-//         }
-//         else if(element.downVoters.indexOf(userID) > -1){
-//         let downvote = document.getElementById("downvote-" + element.id)
-//         downvote.style.borderTopColor = 'rgb(0, 173, 221)'
-//         }
-    
-   
-
-    // if(element.replies.length){
-//         element.replies.forEach(nestedElement =>{
-
-//             if(nestedElement.upVoters.indexOf(userID) > -1){
-                
-//                try{
-//                  initialVoteLoader(nestedElement, userID)
-//                }catch(error){
-//                 console.log("nested upvote div " + nestedElement.id +  " had not loaded")
-//                }
-//             }
-//             else{
-//                 try{
-//                     initialVoteLoader(nestedElement, userID)
-//                   }catch(error){
-//                    console.log("nested upvote div " + nestedElement.id +  " had not loaded")
-//                   }
-//             }
-              
-
-//         })
-
-     
-    
-// }
-
-// useEffect (() => {
-  
-//     if (threadComments){
-
-       
-//         threadComments.forEach(element => {
-           
-//             const user = auth.currentUser;
-//             if(user){
-//                 const id = user.uid
-               
-//                 try {
-//                     initialVoteLoader(element, id)
-//                 } catch(error){
-//                     console.log("upvote div had not loaded")
-//                     }
-//                 }
-            
-           
-//         })
-    
-//     }
-// });
 
 
     return (
@@ -377,7 +317,7 @@ const firstRun = useEffect (() => {
             <UserNavBar subText={subMockitSubText}/>
     <div id="mainContent" > 
         <div className='SubMockitThread' margin-left="5px">
-            <SubMockitThread id={currentThread.id} linkAddress={currentThread.linkAddress} linkText={currentThread.linkText} postedAt={currentThread.postedAt} user={currentThread.postedBy} path={currentThread.threadPath} upVoters={currentThread.upVoters} downVoters={currentThread.downVoters} resetColor={resetColor} subMockItName={currentThread.subMockItName} commentsTotal = {commentsCount} totalVotes={currentThread.totalVotes} />
+            <SubMockitThread id={currentThread.id} linkAddress={currentThread.linkAddress} linkText={currentThread.linkText} postedAt={currentThread.postedAt} user={currentThread.postedBy} path={currentThread.threadPath} upVoters={currentThread.upVoters} downVoters={currentThread.downVoters} resetColor={resetColor} resetName={resetName} subMockItName={currentThread.subMockItName} commentsTotal = {commentsCount} votesTotal={currentThread.votesTotal} />
 
             <div>{commentsCount} comments</div>
             <div className='divider'></div>

@@ -149,10 +149,10 @@ function UserComments(props) {
         <div>
             <div className='commentHeader'>
                 <div className='commentCollapse'>[-]</div>
-                <Link className='userheaderItem' to={"/u/" + props.user}>{props.user}</Link>
-                <div className=''>{voteCount} points</div>
-                <div className='headerItem'>{props.postedAt} ago</div>
-                <div>to <Link className='userheaderItem'  to={"/m/" + props.postedTo}>{props.postedTo}</Link></div>
+                <Link className='commentUserName' to={"/u/" + props.user}>{props.user}</Link>
+                <div className='userheaderItem'>{voteCount} points</div>
+                <div className='userheaderItem'>{props.postedAt} ago</div>
+                <div className='userheaderItem'>to <Link className='commentUserName'  to={"/m/" + props.postedTo}>{props.postedTo}</Link></div>
             </div>
             <div className='commentText'>{props.comment}</div>
             <div className='commentFooter'>            

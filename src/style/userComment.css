@@ -5,4 +5,10 @@
 
 .userheaderItem{
     text-decoration: none;
+    height: 100%;
+    text-align: bottom;
+    width: fit-content;
+    font-size: 90%;
+    margin: auto .3em auto .2em;
 }
+
