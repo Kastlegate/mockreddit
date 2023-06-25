@@ -21,16 +21,16 @@ function SubMockitThread(props) {
         </div>
       <div className="subMockitThread" id={props.id} >     
         <div className='linkAndSource'>
-            <a  href={props.linkAddress} target={'_blank'}>{props.linkText}</a>
+            <a className='outsideLink' href={props.linkAddress} target={'_blank'}>{props.linkText}</a>
             <a href={props.link} >(news.com)</a>
         </div>
 
         <div className='whoWhenAndWhere'>
-            submitted {props.postedAt} ago by <Link className='userSubMockitLink' to={"/u/" + props.user}>{props.user}</Link> to <Link className='subMockitLink' to={"/m/" + props.subMockItName}>{props.subMockItName}</Link>
+            submitted {props.postedAt} ago by <Link  className='subMockItLink' to={"/u/" + props.user}>{props.user}</Link> to <Link className='subMockItLink' to={"/m/" + props.subMockItName}>{props.subMockItName}</Link>
         </div>
 
         <div className='commentsAndSharing'>
-            {props.commentsTotal} <Link to={"/m/" + props.subMockItName + "/" + props.id + "/comments"}> comments</Link> share save hide
+            {props.commentsTotal} <Link to={"/m/" + props.subMockItName + "/" + props.id + "/comments"} className='subMockItLink' > comments</Link> share save hide
         </div>
       </div>
     </div>

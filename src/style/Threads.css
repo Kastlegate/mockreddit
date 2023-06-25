@@ -27,6 +27,7 @@
 .linkAndSource{
     font-size: 15px;
     margin-bottom: 5px;
+    
 }
 
 .whoWhenAndWhere{
@@ -39,10 +40,11 @@
     margin-bottom: 10px;
 }
 
-.userSubMockitLink{
-
+.outsideLink{
+    text-decoration: none;
 }
 
 .subMockItLink{
-
+    text-decoration: none;
+    color: blue;
 }
