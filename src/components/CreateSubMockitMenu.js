@@ -30,9 +30,13 @@ function CreateSubMockitMenu(props) {
                 setDoc(doc(db, 'subMockIts', subMockItName), {
                         title: subMockitTitle,
                         sidebar: sidebar,
-                        admin: auth.currentUser.uid,
+                        moderators: [auth.currentUser.uid],
                         subscribers: [],
+                        admin: auth.currentUser.uid
+                        
                   })
+
+
             }
           })
 
@@ -64,7 +68,7 @@ useEffect(() => {
    
     return (
 
-        <form ref={createSubMockitRef} id="createSubMockitForm" onSubmit={(e) => handleSubmit(e)}>
+        <form ref={createSubMockitRef} href={"/m/" + subMockItName } target="_blank" id="createSubMockitForm" onSubmit={(e) => handleSubmit(e)}>
 
             <label className='createSubMockitFormItems'>
                 <div className='createSubmockItText'>Name</div>

@@ -48,9 +48,9 @@ const getLengthOfTimeSincePosted = (postedDate) =>{
   }
 
   const votesTotal = (upvotes, downvotes) => {
-    let total = upvotes + downvotes;
+    let total = upvotes - downvotes;
     return total;
   }
 
-  
+
   export {getLengthOfTimeSincePosted, votesTotal}

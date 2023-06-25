@@ -181,7 +181,7 @@ function CommentTemplate(props) {
     <div className='commentContainer'>
         <div className='votesDisplay'>
             <div id={"upvote-" + props.id} style={upVoteColor} className='upvote' data-upvoteid={props.id} onClick={handleUpVote}></div>          
-            <div id={"downvote-" + props.id} style={downVoteColor} className='downvote' data-downvoteid={props.id} onClick={handleUpVote}></div>
+            <div id={"downvote-" + props.id} style={downVoteColor} className='commentdownvote' data-downvoteid={props.id} onClick={handleUpVote}></div>
         </div>
         <div>
             <div className='commentHeader'>

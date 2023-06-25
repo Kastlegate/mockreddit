@@ -25,7 +25,7 @@ function Header(props) {
       }
       else{
         console.log('user has logged out')
-        setListOfsubscribedSubmockits([])
+        setListOfsubscribedSubmockits(["movies", 'tvshows', 'videogames', 'politics', 'pics', 'zelda', 'mario'])
       }
     })
 

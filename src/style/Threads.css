@@ -7,6 +7,23 @@
 
 .votesDisplay{
     margin: 3px 3px 3px 3px;
+    width: fit-content;
+    height: 25px;
+}
+
+.voteCount{
+    font-size: 90%;
+    width: 100%;
+    margin-left: 2px;
+}
+.downVote{
+    margin-top: 5px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid rgb(163, 149, 149);
+    cursor: pointer;
 }
 
 .subMockit{

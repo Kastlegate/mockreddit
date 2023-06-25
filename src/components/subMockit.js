@@ -38,7 +38,7 @@ function SubMockit(props) {
                             postedAt: getLengthOfTimeSincePosted(thread.data().postedAt),
                             postedBy: thread.data().postedBy, 
                             subMockItName: thread.data().subMockItName,
-                            totalVotes: votesTotal(thread.data().upVoters.length, thread.data().downVoters.length),
+                            votesTotal: votesTotal(thread.data().upVoters.length, thread.data().downVoters.length),
                             commentsTotal: thread.data().commentsTotal,
                             upVoters: thread.data().upVoters,
                             downVoters: thread.data().downVoters,
@@ -86,7 +86,7 @@ function SubMockit(props) {
     <div id="mainContent" >  
         <div className='SubMockitThread'>{subMockitInfo.map((thread) => {
                       return (
-                        <SubMockitThread id={thread.id} key={thread.id} linkAddress={thread.linkAddress} linkText={thread.linkText} postedAt={thread.postedAt} commentsTotal={thread.commentsTotal} upVoters={thread.upVoters} downVoters={thread.downVoters} user={thread.postedBy} subMockItName={thread.subMockItName} path={thread.threadPath} totalVotes={thread.totalVotes} />
+                        <SubMockitThread id={thread.id} key={thread.id} linkAddress={thread.linkAddress} linkText={thread.linkText} postedAt={thread.postedAt} commentsTotal={thread.commentsTotal} upVoters={thread.upVoters} downVoters={thread.downVoters} user={thread.postedBy} subMockItName={thread.subMockItName} path={thread.threadPath} votesTotal={thread.votesTotal} />
                           )
                     })}</div>
      

@@ -1,6 +1,6 @@
 import Header from './header.js'
 import UserNavBar from './userNavBar.js'
-import { getLengthOfTimeSincePosted } from './moreFunctions.js'
+import { getLengthOfTimeSincePosted, votesTotal } from './moreFunctions.js'
 import { useParams } from 'react-router-dom';
 import '../style/home.css';
 import SubMockitThread from './/Threads.js'
@@ -18,7 +18,7 @@ const [threads, setThreads] = useState([])
 
 useEffect(() => {
   
-
+  document.title = 'Mockit'
   const user = auth.currentUser;
   // if a user exists, loads the comments from the user's subscribed submockits, else it loads the default submockit posts 
   if(user){
@@ -45,6 +45,7 @@ useEffect(() => {
                   subMockItName: thread.data().subMockItName,
                   postedBy: thread.data().postedBy,
                   linkText: thread.data().linkText,
+                  votesTotal: votesTotal(thread.data().upVoters.length, thread.data().downVoters.length),
                   upVoters: thread.data().upVoters,
                   downVoters: thread.data().downVoters,
                   commentsTotal: thread.data().commentsTotal,
@@ -91,6 +92,7 @@ useEffect(() => {
                   subMockItName: thread.data().subMockItName,
                   postedBy: thread.data().postedBy,
                   linkText: thread.data().linkText,
+                  votesTotal: votesTotal(thread.data().upVoters.length, thread.data().downVoters.length),
                   upVoters: thread.data().upVoters,
                   downVoters: thread.data().downVoters,
                   commentsTotal: thread.data().commentsTotal,
@@ -128,7 +130,7 @@ useEffect(() => {
       <div id="mainContent" >
          <div className='SubMockitThread'>{threads.map((thread) => {
                       return (
-                        <SubMockitThread id={thread.id} key={thread.id} linkAddress={thread.linkAddress} linkText={thread.linkText} postedAt={thread.postedAt} user={thread.postedBy} commentsTotal={thread.commentsTotal} upVoters={thread.upVoters} downVoters={thread.downVoters} path={thread.threadPath} subMockItName={thread.subMockItName} totalVotes={thread.totalVotes} />
+                        <SubMockitThread id={thread.id} key={thread.id} linkAddress={thread.linkAddress} linkText={thread.linkText} postedAt={thread.postedAt} user={thread.postedBy} commentsTotal={thread.commentsTotal} upVoters={thread.upVoters} downVoters={thread.downVoters} path={thread.threadPath} subMockItName={thread.subMockItName} votesTotal={thread.votesTotal} />
                           )
                     })}</div>
         

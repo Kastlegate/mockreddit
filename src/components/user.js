@@ -39,14 +39,19 @@ useEffect(() => {
     getDocs(collectionRef).then((snapShot) => {
         if(snapShot){
             snapShot.docs.forEach(comment => {
+
+                const date = new Date(comment.data().postedAt)
+                const date2 = new Date();
+                const seconds = (date2.getTime() - date.getTime()) / 1000;
+
                 const newComment = {
                     totalVotes: votesTotal(comment.data().upVoters.length, comment.data().downVoters.length),
                     comment: comment.data().comment,
                     postedBy: comment.data().postedBy,
                     postedTo: comment.data().postedTo,
+                    secondsCounter: seconds,
                     id: comment.id,
                     postedAt: getLengthOfTimeSincePosted(comment.data().postedAt),
-                    children: comment.data().children,
                     replies: [],
                     parent: comment.data().parent,
                     upVoters: comment.data().upVoters,
@@ -58,7 +63,15 @@ useEffect(() => {
                    }
                   
                    updater.push(newComment)
-                   setComments([...updater])
+                   let newUpdater = []
+                              newUpdater =  updater.sort(function(a, b) { 
+                               if (Number(a.secondsCounter) > Number(b.secondsCounter)) return 1;
+                               if (Number(a.secondsCounter) < Number(b.secondsCounter)) return -1;
+                               return 0;
+                              })
+
+                             setComments([...newUpdater])
+                //    setComments([...updater])
                    document.title = "u/" + user
 
 

@@ -14,7 +14,7 @@ function SubMockitThread(props) {
     const upVoteID = props.id + "upVote";
     const downvoteID = props.id + "downVote"
 
-    const [voteCount, setVoteCount] = useState(props.totalVotes)
+    const [voteCount, setVoteCount] = useState(props.votesTotal)
     const orange = {borderBottomColor: 'orange'};
     const bluish = {borderTopColor:'rgb(0, 173, 221)'}
     const [upVoteColor, setUpvoteColor] = useState()
@@ -32,7 +32,6 @@ function SubMockitThread(props) {
              }
         }
     },[props.resetColor])
-
 
 
  
@@ -146,8 +145,8 @@ function SubMockitThread(props) {
     <div className='threadContainer'>
         <div className='votesDisplay'>
             <div id={upVoteID} className='upvote' style={upVoteColor} data-upvoteid={props.id} onClick={handleUpVote}></div>
-            <div className='totalVotes'>{props.totalVotes}</div>
-            <div id={downvoteID} className='downvote'style={downVoteColor} data-downvoteid={props.id}  onClick={handleUpVote}></div>
+            <div className='voteCount'>{voteCount}</div>
+            <div id={downvoteID} className='downVote'style={downVoteColor} data-downvoteid={props.id}  onClick={handleUpVote}></div>
         </div>
       <div className="subMockitThread" id={props.id} >     
         <div className='linkAndSource'>

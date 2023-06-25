@@ -46,7 +46,7 @@ function CreateNewLinkMenu(props) {
                                 linkAddress: linkAddress,
                                 postedAt: Date(),
                                 downVoters: [],
-                                upVoters: [],
+                                upVoters: [currentuser.uid],
                                 postedBy: userdocSnap.data().userName,
                                 postedById: currentuser.uid,
                                 subMockItName: postTo,

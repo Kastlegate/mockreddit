@@ -144,13 +144,13 @@ function UserComments(props) {
     <div className='threadContainer'>
         <div className='votesDisplay'>
             <div id={"upvote-" + props.id} style={upVoteColor} className='upvote' data-upvoteid={props.id} onClick={handleUpVote}></div>          
-            <div id={"downvote-" + props.id} style={downVoteColor} className='downvote' data-downvoteid={props.id} onClick={handleUpVote} ></div>
+            <div id={"downvote-" + props.id} style={downVoteColor} className='commentdownvote' data-downvoteid={props.id} onClick={handleUpVote} ></div>
         </div>
         <div>
             <div className='commentHeader'>
                 <div className='commentCollapse'>[-]</div>
-                <Link className='userheaderItem'  to={"/u/" + props.user}>{props.user}</Link>
-                <div className='headerItem'>{voteCount} points</div>
+                <Link className='userheaderItem' to={"/u/" + props.user}>{props.user}</Link>
+                <div className=''>{voteCount} points</div>
                 <div className='headerItem'>{props.postedAt} ago</div>
                 <div>to <Link className='userheaderItem'  to={"/m/" + props.postedTo}>{props.postedTo}</Link></div>
             </div>
