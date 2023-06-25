@@ -1,0 +1,24 @@
+.createSubMockitFormItems{
+    background-color: rgb(217, 231, 248);
+    margin: 5px 5px 5px 5px;
+    width: 400px;
+}
+
+.createSubmockItText{
+    color: rgb(0, 0, 248);
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+.createSubmockItSubText{
+    font-size: 65%;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+#createSubMockitForm{
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+}

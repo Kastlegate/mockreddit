@@ -1,23 +1,27 @@
-import logo from './logo.svg';
+import Header from './components/header.js'
+import UserNavBar from './components/userNavBar.js'
+import Home from './components/home.js'
+import SubMockit from './components/subMockit.js'
+import Comments from './components/comments.js'
+import User from './components/user.js'
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import './App.css';
 
+
 function App() {
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div id="app">
+    <Router>
+
+      <Routes>
+        <Route exact path="/" element={<Home />}></Route>
+        <Route path="/m/:subMockit" element={<SubMockit />}></Route>
+        <Route path="/m/:subMockit/:thread/comments" element={<Comments />}></Route>
+        <Route path="/u/:user" element={<User />}></Route>
+      </Routes>
+    </Router>    
     </div>
   );
 }

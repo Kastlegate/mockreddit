@@ -1,0 +1,48 @@
+.threadContainer{
+    display: flex;
+    flex-direction: row;
+    /* height: fit-content;
+    width: fit-content; */
+}
+
+.votesDisplay{
+    margin: 3px 3px 3px 3px;
+}
+
+.subMockit{
+    width: 200%;
+}
+
+.SubMockitThread{
+    width: 200%;
+    margin-left: 15px;
+}
+
+.subMockits{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.linkAndSource{
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.whoWhenAndWhere{
+    font-size: 12px;
+    margin-bottom: 7px;
+}
+
+.commentsAndSharing{
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.userSubMockitLink{
+
+}
+
+.subMockItLink{
+
+}

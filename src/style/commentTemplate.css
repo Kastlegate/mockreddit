@@ -1,0 +1,94 @@
+.commentContainer{
+    display: flex;
+    flex-direction: row;
+}
+
+.votesDisplay{
+
+}
+
+.commentCollapse{
+
+}
+
+.commentHeader{
+    display: flex;
+    flex-direction: row;
+}
+
+.headerItem{
+    color: rgb(64, 69, 75);
+    font-size: 75%;
+}
+
+.commentUserName{
+    margin-left: 5px;
+}
+
+.commentTotalVotes{
+
+}
+
+.commentTimeStamp{
+
+}
+
+.commentText{
+    margin-top: 5px;
+}
+
+.commentFooter{
+    display: flex;
+    flex-direction: row;
+    color: rgb(64, 69, 75);
+    font-size: 75%;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.footerItem{
+    margin: 5px 5px 5px 5px;
+    cursor: pointer;
+}
+
+.footerItemReply{
+    margin: 5px 5px 5px 5px;
+    color:rgb(60, 121, 196);
+    cursor: pointer;
+}
+
+.replyForm{
+    display: none;
+    flex-direction: column;
+    width: 0px;
+}
+
+.replyButtonContainer{
+    display: flex;
+    flex-direction: row;
+}
+
+.replyButton{
+    margin: 5px 5px 5px 5px;
+}
+
+.upvote {
+    width: 0; 
+    height: 0; 
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;    
+    border-bottom: 8px solid rgb(149, 155, 163);
+    margin-bottom: 5px;
+    cursor: pointer;
+} 
+
+
+.downvote {
+    margin-top: 15px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid rgb(163, 149, 149);
+    cursor: pointer;
+} 

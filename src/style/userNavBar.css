@@ -1,0 +1,121 @@
+#userNavBar{
+    height: 75px;
+    width: 100%;
+    background-color: rgb(217, 231, 248);
+    border-bottom: solid;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+}
+
+#addToBottomLeft{
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    -ms-flex-align: center; 
+    position: absolute;
+    bottom: 0;  
+}
+
+#logo{
+    height: fit-content;
+    width: fit-content;   
+    display: flex;
+    flex-direction: row;
+}
+
+.logoText{
+    text-decoration: none;
+     font-size: 40px;
+     color: inherit;
+}
+
+.logoSubText{
+    text-decoration: none;
+    height: fit-content;
+    width: fit-content;
+    font-size: 25px;
+    margin: auto auto 5px 10px;
+    color: inherit;
+}
+
+#sortMenu{
+    height: fit-content;
+    margin: auto auto 0px auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.sortChoice{
+    margin-right: 10px;
+    font-size: 15px;
+    padding: 5px 5px 0px 5px;
+    background-color: rgb(239, 250, 255);
+    color: rgb(71, 94, 116);
+}
+
+.sortChoiceSelected{
+    height: fit-content;
+    margin-bottom: -2.6px;
+    margin-right: 10px;
+    font-size: 15px;
+    padding: 5px 5px 0px 5px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(214, 32, 0);
+    border-top: solid;
+    border-left: solid;
+    border-right: solid;
+    border-color: black;
+
+}
+
+#addToBottomRight{
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    -ms-flex-align: center; 
+    position: absolute;
+    bottom: 0px; 
+    right: 0px;
+}
+
+#userInfoBar{
+    height: fit-content;
+    width: fit-content;
+    margin: auto auto 0px auto;
+    display: flex;
+    flex-direction: row;
+    font-size: larger;
+    background-color: rgb(239, 250, 255);
+    border-radius: 10px 0px 0px 0px;
+}
+
+.userBarLink{
+    text-decoration: none;
+    height: fit-content;
+    width: fit-content;
+    margin-left: 10px;
+    color: blue;
+    cursor: pointer;
+}
+
+.userBarText{
+    height: fit-content;
+    width: fit-content;
+    margin-left: 10px;
+}
+
+#signUpContainer{
+    height: 400px;
+    width: 800px;
+    border: thin;
+    margin: auto;
+    display: flex;
+    border-radius: 5px 5px 5px 5px;
+    flex-direction: column;
+    box-shadow: 1px 5px 5px 1px;
+    z-index: 5;
+    /* position: absolute; */
+    margin: 100px auto auto auto;
+    background-color: white;
+}
