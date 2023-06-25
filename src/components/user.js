@@ -70,29 +70,29 @@ useEffect(() => {
 
 }, [user])
 
-useEffect (() => {
+// useEffect (() => {
   
-    if (comments){
+//     if (comments){
 
        
-        comments.forEach(element => {
+//         comments.forEach(element => {
            
-            const user = auth.currentUser;
-            if(user){
-                const id = user.uid
+//             const user = auth.currentUser;
+//             if(user){
+//                 const id = user.uid
                
-                try {
-                    initialVoteLoader(element, id)
-                } catch(error){
-                    console.log("upvote div had not loaded")
-                    }
-                }
+//                 try {
+//                     initialVoteLoader(element, id)
+//                 } catch(error){
+//                     console.log("upvote div had not loaded")
+//                     }
+//                 }
             
            
-        })
+//         })
     
-    }
-});
+//     }
+// });
 
 
     return (

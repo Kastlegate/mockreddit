@@ -39,3 +39,7 @@
     padding-top: 10px;
     border-color: rgb(167, 164, 159);
 }
+
+.commentUserName{
+    text-decoration: none;
+}

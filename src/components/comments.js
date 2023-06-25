@@ -14,7 +14,7 @@ function Comments(props) {
 
 const { thread } = useParams()
 const { subMockit } = useParams()
-const [currentThread, setCurrentThread] = useState('')
+const [currentThread, setCurrentThread] = useState({upVoters:[], downVoters: []})
 const [threadComments, setThreadComments] = useState([])
 const [newCommentBox, setNewCommentBox] = useState('')
 const [commentStateUpdater, setCommentStateUpdater] = useState(false)
@@ -22,6 +22,7 @@ const [commentsCount, setCommentsCount] = useState(0)
 const [finishedLoading, setFinishedLoading] = useState(false)
 const [sideBar, setSideBar] = useState('')
 const [ subMockitSubText, setSubMockitSubText] = useState('')
+const [resetColor, setResetColor] = useState(1)
 
 
 const votesTotal = (upvotes, downvotes) => {
@@ -131,7 +132,7 @@ const getComments = () =>{
                         // }
 
                         updater.push(newComment)
-                       setThreadComments([...updater])
+                       
                     //    checkVotes(newComment)
                     //    setCommentStateUpdater([true])
                     // } else {
@@ -143,7 +144,7 @@ const getComments = () =>{
                  
             });
         }
-       
+        setThreadComments([...updater])
     }) 
       
 
@@ -258,7 +259,7 @@ const addRepliesToComment = (nestedCommentReplies, counter) =>{
 
 
 
-useEffect (() => {
+const firstRun = useEffect (() => {
 
 
     getDoc(doc(db, 'subMockIts', subMockit)).then(docSnap => {
@@ -284,15 +285,19 @@ useEffect (() => {
                     const newThread = {
                         linkAddress: docSnap.data().linkAddress,
                         linkText: docSnap.data().linkText,
-                        postedAt: docSnap.data().postedAt.toString(),
+                        postedAt: getLengthOfTimeSincePosted(docSnap.data().postedAt),
                         postedBy: docSnap.data().userName,                 
                         subMockItName: docSnap.data().subMockItName,
-                        totalVotes: votesTotal(docSnap.data().upVoters.length, docSnap.data().downVoters.length),
+                        // totalVotes: votesTotal(docSnap.data().upVoters.length, docSnap.data().downVoters.length),
                         id: docSnap.id,
-                        commentsTotal: docSnap.data().commentsTotal
+                        upVoters: docSnap.data().upVoters,
+                        downVoters: docSnap.data().downVoters,
+                        commentsTotal: docSnap.data().commentsTotal,
+                        threadPath: docSnap.ref.path
                     }
                     setCurrentThread(newThread)
                     setCommentsCount(docSnap.data().commentsTotal)
+                    setResetColor(2)
   
                         
         } else {
@@ -303,68 +308,68 @@ useEffect (() => {
       
 }, [])
 
-const initialVoteLoader = (element, userID) => {
+// const initialVoteLoader = (element, userID) => {
 
-    if(element.upVoters.indexOf(userID) > -1){
-        let upvote = document.getElementById("upvote-" + element.id)
-        upvote.style.borderBottomColor = 'orange'
-        }
-        else if(element.downVoters.indexOf(userID) > -1){
-        let downvote = document.getElementById("downvote-" + element.id)
-        downvote.style.borderTopColor = 'rgb(0, 173, 221)'
-        }
+//     if(element.upVoters.indexOf(userID) > -1){
+//         let upvote = document.getElementById("upvote-" + element.id)
+//         upvote.style.borderBottomColor = 'orange'
+//         }
+//         else if(element.downVoters.indexOf(userID) > -1){
+//         let downvote = document.getElementById("downvote-" + element.id)
+//         downvote.style.borderTopColor = 'rgb(0, 173, 221)'
+//         }
     
    
 
     // if(element.replies.length){
-        element.replies.forEach(nestedElement =>{
+//         element.replies.forEach(nestedElement =>{
 
-            if(nestedElement.upVoters.indexOf(userID) > -1){
+//             if(nestedElement.upVoters.indexOf(userID) > -1){
                 
-               try{
-                 initialVoteLoader(nestedElement, userID)
-               }catch(error){
-                console.log("nested upvote div " + nestedElement.id +  " had not loaded")
-               }
-            }
-            else{
-                try{
-                    initialVoteLoader(nestedElement, userID)
-                  }catch(error){
-                   console.log("nested upvote div " + nestedElement.id +  " had not loaded")
-                  }
-            }
+//                try{
+//                  initialVoteLoader(nestedElement, userID)
+//                }catch(error){
+//                 console.log("nested upvote div " + nestedElement.id +  " had not loaded")
+//                }
+//             }
+//             else{
+//                 try{
+//                     initialVoteLoader(nestedElement, userID)
+//                   }catch(error){
+//                    console.log("nested upvote div " + nestedElement.id +  " had not loaded")
+//                   }
+//             }
               
 
-        })
+//         })
 
      
     
-}
+// }
 
-useEffect (() => {
+// useEffect (() => {
   
-    if (threadComments){
+//     if (threadComments){
 
        
-        threadComments.forEach(element => {
+//         threadComments.forEach(element => {
            
-            const user = auth.currentUser;
-            if(user){
-                const id = user.uid
+//             const user = auth.currentUser;
+//             if(user){
+//                 const id = user.uid
                
-                try {
-                    initialVoteLoader(element, id)
-                } catch(error){
-                    console.log("upvote div had not loaded")
-                    }
-                }
+//                 try {
+//                     initialVoteLoader(element, id)
+//                 } catch(error){
+//                     console.log("upvote div had not loaded")
+//                     }
+//                 }
             
            
-        })
+//         })
     
-    }
-});
+//     }
+// });
 
 
     return (
@@ -372,7 +377,7 @@ useEffect (() => {
             <UserNavBar subText={subMockitSubText}/>
     <div id="mainContent" > 
         <div className='SubMockitThread' margin-left="5px">
-            <SubMockitThread id={currentThread.id} linkAddress={currentThread.linkAddress} linkText={currentThread.linkText} postedAt={currentThread.postedAt} user={currentThread.postedBy} subMockItName={currentThread.subMockItName} commentsTotal = {commentsCount} totalVotes={currentThread.totalVotes} />
+            <SubMockitThread id={currentThread.id} linkAddress={currentThread.linkAddress} linkText={currentThread.linkText} postedAt={currentThread.postedAt} user={currentThread.postedBy} path={currentThread.threadPath} upVoters={currentThread.upVoters} downVoters={currentThread.downVoters} resetColor={resetColor} subMockItName={currentThread.subMockItName} commentsTotal = {commentsCount} totalVotes={currentThread.totalVotes} />
 
             <div>{commentsCount} comments</div>
             <div className='divider'></div>

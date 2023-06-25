@@ -45,9 +45,10 @@ useEffect(() => {
                   subMockItName: thread.data().subMockItName,
                   postedBy: thread.data().postedBy,
                   linkText: thread.data().linkText,
-                  upVoters: thread.data().upVoters.length,
-                  downVoters: thread.data().downVoters.length,
+                  upVoters: thread.data().upVoters,
+                  downVoters: thread.data().downVoters,
                   commentsTotal: thread.data().commentsTotal,
+                  threadPath: thread.ref.path,
                   }
 
                    updater.push(newThread)
@@ -90,9 +91,10 @@ useEffect(() => {
                   subMockItName: thread.data().subMockItName,
                   postedBy: thread.data().postedBy,
                   linkText: thread.data().linkText,
-                  upVoters: thread.data().upVoters.length,
-                  downVoters: thread.data().downVoters.length,
+                  upVoters: thread.data().upVoters,
+                  downVoters: thread.data().downVoters,
                   commentsTotal: thread.data().commentsTotal,
+                  threadPath: thread.ref.path,
                   }
                   // console.log(newThread)
                   updater.push(newThread)
@@ -126,7 +128,7 @@ useEffect(() => {
       <div id="mainContent" >
          <div className='SubMockitThread'>{threads.map((thread) => {
                       return (
-                        <SubMockitThread id={thread.id} key={thread.id} linkAddress={thread.linkAddress} linkText={thread.linkText} postedAt={thread.postedAt} user={thread.postedBy} commentsTotal={thread.commentsTotal} subMockItName={thread.subMockItName} totalVotes={thread.totalVotes} />
+                        <SubMockitThread id={thread.id} key={thread.id} linkAddress={thread.linkAddress} linkText={thread.linkText} postedAt={thread.postedAt} user={thread.postedBy} commentsTotal={thread.commentsTotal} upVoters={thread.upVoters} downVoters={thread.downVoters} path={thread.threadPath} subMockItName={thread.subMockItName} totalVotes={thread.totalVotes} />
                           )
                     })}</div>
         

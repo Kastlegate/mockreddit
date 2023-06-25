@@ -40,7 +40,10 @@ function SubMockit(props) {
                             subMockItName: thread.data().subMockItName,
                             totalVotes: votesTotal(thread.data().upVoters.length, thread.data().downVoters.length),
                             commentsTotal: thread.data().commentsTotal,
-                            id: thread.id
+                            upVoters: thread.data().upVoters,
+                            downVoters: thread.data().downVoters,
+                            id: thread.id,
+                            threadPath: thread.ref.path,
                         }
                          
                         updater.push(newThread)
@@ -83,7 +86,7 @@ function SubMockit(props) {
     <div id="mainContent" >  
         <div className='SubMockitThread'>{subMockitInfo.map((thread) => {
                       return (
-                        <SubMockitThread id={thread.id} key={thread.id} linkAddress={thread.linkAddress} linkText={thread.linkText} postedAt={thread.postedAt} commentsTotal={thread.commentsTotal} user={thread.postedBy} subMockItName={thread.subMockItName} totalVotes={thread.totalVotes} />
+                        <SubMockitThread id={thread.id} key={thread.id} linkAddress={thread.linkAddress} linkText={thread.linkText} postedAt={thread.postedAt} commentsTotal={thread.commentsTotal} upVoters={thread.upVoters} downVoters={thread.downVoters} user={thread.postedBy} subMockItName={thread.subMockItName} path={thread.threadPath} totalVotes={thread.totalVotes} />
                           )
                     })}</div>
      
