@@ -14,7 +14,7 @@ function Comments(props) {
 
 const { thread } = useParams()
 const { subMockit } = useParams()
-const [currentThread, setCurrentThread] = useState({upVoters:[], downVoters: []})
+const [currentThread, setCurrentThread] = useState({upVoters:[], downVoters: [], linkAddress: 'https://mockreddit-22590.web.app/'})
 const [threadComments, setThreadComments] = useState([])
 const [newCommentBox, setNewCommentBox] = useState('')
 const [commentStateUpdater, setCommentStateUpdater] = useState(false)
@@ -258,7 +258,7 @@ const addRepliesToComment = (nestedCommentReplies, counter) =>{
 }
 
 
-
+////// FIIIIIIIIIIXXXXXXXXXXX SORTIIIIIING BUTTOOOOOOOOOOONNNNNNSSSSS
 
 useEffect (() => {
 

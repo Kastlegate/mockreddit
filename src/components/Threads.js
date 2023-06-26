@@ -20,7 +20,8 @@ function SubMockitThread(props) {
     const [upVoteColor, setUpvoteColor] = useState()
     const [downVoteColor, setDownVoteColor] = useState()
     const [userName, setUserName] = useState(props.user)
-
+    const [siteLink, setSiteLink] = useState('https://mockreddit-22590.web.app/')
+ 
     useEffect (() =>{
         const user = auth.currentUser;
         if(user){
@@ -42,7 +43,14 @@ function SubMockitThread(props) {
 
     setUserName(props.user)
     console.log(props.user)
-},[props.resetName])
+},[props.resetColor])
+
+  useEffect(() =>{
+    const a = props.linkAddress;
+    const hostname = new URL(a).hostname; // "www.google.com"
+    setSiteLink(hostname)
+    
+  }, [props.resetColor])
 
 
  
@@ -162,7 +170,7 @@ function SubMockitThread(props) {
       <div className="subMockitThread" id={props.id} >     
         <div className='linkAndSource'>
             <a className='outsideLink' href={props.linkAddress} target={'_blank'}>{props.linkText}</a>
-            <a href={props.link} >(news.com)</a>
+            <a href={props.link} > ({siteLink})</a>
         </div>
 
         <div className='whoWhenAndWhere'>

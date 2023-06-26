@@ -11,10 +11,37 @@ import { onSnapshot, collection, collectionGroup, where, query, useCollectionDat
 import { useState, useEffect } from 'react';
 
 
+
 function Home(props) {
 
 const [threads, setThreads] = useState([])
+const [loading, setLoading] = useState(true)
+const sortTimeNewest = (array, sortedArray) => {
+    sortedArray =  array.sort(function(a, b) { 
+    if (Number(a.secondsCounter) > Number(b.secondsCounter)) return 1;
+    if (Number(a.secondsCounter) < Number(b.secondsCounter)) return -1;
+    return 0;
+  })
+  return sortedArray
+}
 
+const sortMostUpvotes = (array, sortedArray) => {
+  sortedArray =  array.sort(function(a, b) { 
+  if (Number(a.votesTotal / (a.secondsCounter / 1000)) < Number(b.votesTotal / (b.secondsCounter / 1000))) return 1;
+  if (Number(a.votesTotal / (a.secondsCounter / 1000)) > Number(b.votesTotal / (b.secondsCounter / 1000))) return -1;
+  return 0;
+})
+return sortedArray
+}
+
+const sortBest = (array, sortedArray) => {
+  sortedArray =  array.sort(function(a, b) { 
+  if (Number(a.votesTotal / a.secondsCounter) < Number(b.votesTotal / b.secondsCounter)) return 1;
+  if (Number(a.votesTotal / a.secondsCounter) > Number(b.votesTotal / b.secondsCounter)) return -1;
+  return 0;
+})
+return sortedArray
+}
 
 useEffect(() => {
   
@@ -23,9 +50,10 @@ useEffect(() => {
   // if a user exists, loads the comments from the user's subscribed submockits, else it loads the default submockit posts 
   if(user){
     let updater = []
-    
+    setLoading(false)
     const currentUser = auth.currentUser;
-    if(currentUser){
+    if(user){
+      
       getDoc(doc(db, 'users', currentUser.uid)).then(userdocSnap => { 
         const subMockitsArray = userdocSnap.data().subcribedSubMockits
         subMockitsArray.forEach(submockit => {
@@ -53,26 +81,25 @@ useEffect(() => {
                   }
 
                    updater.push(newThread)
+                   setLoading(true)
             })
                               // console.log(newThread)
                              
                               let newUpdater = []
-                              newUpdater =  updater.sort(function(a, b) { 
-                               if (Number(a.secondsCounter) > Number(b.secondsCounter)) return 1;
-                               if (Number(a.secondsCounter) < Number(b.secondsCounter)) return -1;
-                               return 0;
-                              })
+                              
+                              newUpdater = sortMostUpvotes(updater, newUpdater)
 
                              setThreads([...newUpdater])
-
+                             setLoading(false)
             }
            })
         })
        
   
       })
+     
     }
-
+    
     
   }
   else{
@@ -100,7 +127,7 @@ useEffect(() => {
                   }
                   // console.log(newThread)
                   updater.push(newThread)
-                  
+                  setLoading(true)
             })
 
               let newUpdater = []
@@ -111,10 +138,14 @@ useEffect(() => {
               })
 
             setThreads([...newUpdater])
+            
         }
+    }).then(() =>{
+      setLoading(false)
     })
+   
   }
-
+ 
 
 
 }, [auth.currentUser])
@@ -128,11 +159,19 @@ useEffect(() => {
         <UserNavBar />
 
       <div id="mainContent" >
-         <div className='SubMockitThread'>{threads.map((thread) => {
+
+              {loading ? <div>...LOADING</div>  : null}
+
+      {!loading ? <div className='SubMockitThread'>{threads.map((thread) => {
                       return (
                         <SubMockitThread id={thread.id} key={thread.id} linkAddress={thread.linkAddress} linkText={thread.linkText} postedAt={thread.postedAt} user={thread.postedBy} commentsTotal={thread.commentsTotal} upVoters={thread.upVoters} downVoters={thread.downVoters} path={thread.threadPath} subMockItName={thread.subMockItName} votesTotal={thread.votesTotal} />
                           )
-                    })}</div>
+                    })}</div>  : null}
+         {/* <div className='SubMockitThread'>{threads.map((thread) => {
+                      return (
+                        <SubMockitThread id={thread.id} key={thread.id} linkAddress={thread.linkAddress} linkText={thread.linkText} postedAt={thread.postedAt} user={thread.postedBy} commentsTotal={thread.commentsTotal} upVoters={thread.upVoters} downVoters={thread.downVoters} path={thread.threadPath} subMockItName={thread.subMockItName} votesTotal={thread.votesTotal} />
+                          )
+                    })}</div> */}
         
        <MockItMenu />
       </div>
