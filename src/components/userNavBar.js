@@ -136,8 +136,8 @@ useEffect(() => {
           {userLoggedInNavBar ? <div id='userInfoBar'>
               {/* <div className='userBarText'>Want to join?</div> */}
               <Link className='userBarLink' to={"/u/" + currentUsersName}>{currentUsersName}</Link>
-              <div className='userBarText'> | messages | </div>
-              <div className='userBarLink' >preferences</div>
+              {/* <div className='userBarText'> | messages | </div>
+              <div className='userBarLink' >preferences</div> */}
               <div className='userBarText'> | </div>
               <div className='userBarLink' onClick={(e) => signOutHandler(e)}>Log Out</div>
               </div> 

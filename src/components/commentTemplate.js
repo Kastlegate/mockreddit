@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { auth,  db } from '../firebase/firebase-config';
 import { arrayUnion, updateDoc, doc, } from 'firebase/firestore';
 import { useParams } from 'react-router-dom';
+import { votesTotal, } from './moreFunctions.js'
 
 
 
@@ -87,7 +88,8 @@ function CommentTemplate(props) {
                     props.upVoters.splice(index, 1)
                     console.log(props.upVoters)
                     updateDoc(doc(db, props.path), {
-                        upVoters: props.upVoters
+                        upVoters: props.upVoters,
+                        voteScore: votesTotal(props.upVoters.length, props.downVoters.length)
                         })
                         setUpvoteColor()
                         
@@ -100,20 +102,24 @@ function CommentTemplate(props) {
                     let index = props.upVoters.indexOf(user.uid)
                     e.target.style.borderBottomColor = 'orange';
                     props.downVoters.splice(index, 1)
+                    props.upVoters.push(user.uid)
                     updateDoc(doc(db, props.path), {
                         downVoters: props.downVoters,
-                        upVoters: arrayUnion(user.uid)
+                        upVoters: arrayUnion(user.uid),
+                        voteScore: votesTotal(props.upVoters.length, props.downVoters.length)
                         })
                         setUpvoteColor(orange)
-                        props.upVoters.push(user.uid)
+                        
                         setDownVoteColor()
                         setVoteCount(voteCount + 2)
                 }
                 else{
+                    props.upVoters.push(user.uid)
                     updateDoc(doc(db, props.path), {
-                        upVoters: arrayUnion(user.uid)
+                        upVoters: arrayUnion(user.uid),
+                        voteScore: votesTotal(props.upVoters.length, props.downVoters.length)
                         })
-                        props.upVoters.push(user.uid)
+                        
                         setUpvoteColor(orange)
                     setVoteCount(voteCount + 1)
                 }   
@@ -136,7 +142,8 @@ function CommentTemplate(props) {
    
                     props.downVoters.splice(index, 1)
                     updateDoc(doc(db, props.path), {
-                        downVoters: props.downVoters
+                        downVoters: props.downVoters,
+                        voteScore: votesTotal(props.upVoters.length, props.downVoters.length)
                         })
                         setDownVoteColor()
                         setVoteCount(voteCount + 1)
@@ -148,22 +155,26 @@ function CommentTemplate(props) {
                     let index = props.upVoters.indexOf(user.uid)
                     
                     props.upVoters.splice(index, 1)
+                    props.downVoters.push(user.uid)
                     updateDoc(doc(db, props.path), {
                         upVoters: props.upVoters,
-                        downVoters: arrayUnion(user.uid)
+                        downVoters: arrayUnion(user.uid),
+                        voteScore: votesTotal(props.upVoters.length, props.downVoters.length)
                         })
-                        props.downVoters.push(user.uid)
+                        
                        setUpvoteColor()
                         setDownVoteColor(bluish)
                         setVoteCount(voteCount - 2)
                 }
                 else{
-                    console.log("3")
+             
+                    props.downVoters.push(user.uid)
                     updateDoc(doc(db, props.path), {
-                        downVoters: arrayUnion(user.uid)
+                        downVoters: arrayUnion(user.uid),
+                        voteScore: votesTotal(props.upVoters.length, props.downVoters.length)
                         })
                         setDownVoteColor(bluish)
-                        props.downVoters.push(user.uid)
+                      
                     setVoteCount(voteCount - 1)
                 }   
                 

@@ -65,86 +65,40 @@ function SubMockit(props) {
    
     }  
 const getPrevThreads = () =>{
-    const prevcollectionRef = query(collection(db, "subMockIts", subMockit, 'threads'),  orderBy("postedAt"), endBefore(getFirstDoc), limitToLast(5));
-       
-        
-  
-        getCollectionRef(prevcollectionRef)  
+    const prevcollectionRef = query(collection(db, "subMockIts", subMockit, 'threads'),  orderBy("postedAt"), endBefore(getFirstDoc), limitToLast(25));
+ 
+    getCollectionRef(prevcollectionRef)  
     
 }
 
-    const getNextThreads = () => {
-        const nextcollectionRef = query(collection(db, "subMockIts", subMockit, 'threads'),  orderBy("postedAt"), startAfter(getLastDoc || 0), limit(5));
-       
-        
-            if(getLastDoc){
-                getCollectionRef(nextcollectionRef)  
-            }
-        
+const getNextThreads = () => {
+    const nextcollectionRef = query(collection(db, "subMockIts", subMockit, 'threads'),  orderBy("postedAt"), startAfter(getLastDoc || 0), limit(25));
 
-
-              
-
+    if(getLastDoc){
+        getCollectionRef(nextcollectionRef)  
     }
+}
      
-    useEffect (() => {
-        const collectionRef = query(collection(db, "subMockIts", subMockit, 'threads'), orderBy("postedAt"),  limit(5));
+useEffect (() => {
+    const collectionRef = query(collection(db, "subMockIts", subMockit, 'threads'), orderBy("postedAt"),  limit(25));
 
-        getCollectionRef(collectionRef)
-
-
+    getCollectionRef(collectionRef)
 
 
+    getDoc(doc(db, 'subMockIts', subMockit)).then(docSnap => {
+        //if to make sure the submockit does not already exist
+        if (docSnap.exists()) {
+            setSideBar(docSnap.data().sidebar)
+            setSubMockitSubText(docSnap.data().title)
+            document.title = docSnap.data().title
+        //   document.getElementById('logo').textContent = docSnap.data().title
+        } else {
+            //if the submockit does not exist, this creates the submockit
+            console.log(subMockit + " does not exist");
+        }
+        })
 
-        // //getdocs to get all of the docs in the submockit collection
-        // getDocs(collectionRef).then((snapShot) => {
-        //     const updater = []
-
-        //     snapShot.docs.forEach(thread => {
-        //         //getdoc to get the username of the user that posted the thread
-        //         // getDoc(doc(db, 'users', thread.data().postedBy)).then(docSnap => {
-        //             // if (docSnap.exists())  {
-        //                 const newThread = {
-        //                     linkAddress: thread.data().linkAddress,
-        //                     linkText: thread.data().linkText,
-        //                     postedAt: getLengthOfTimeSincePosted(thread.data().postedAt),
-        //                     postedBy: thread.data().postedBy, 
-        //                     subMockItName: thread.data().subMockItName,
-        //                     votesTotal: votesTotal(thread.data().upVoters.length, thread.data().downVoters.length),
-        //                     commentsTotal: thread.data().commentsTotal,
-        //                     upVoters: thread.data().upVoters,
-        //                     downVoters: thread.data().downVoters,
-        //                     id: thread.id,
-        //                     threadPath: thread.ref.path,
-        //                 }
-        //                  console.log("hi " + newThread.votesTotal)
-        //                 updater.push(newThread)
-        //                 setSubmockitInfo([...updater])
-                       
-                    // } else {
-                    //   console.log("no user")
-                    // }
-                    
-                // })
-                 
-        //     });
-         
-        // }) 
-
-        getDoc(doc(db, 'subMockIts', subMockit)).then(docSnap => {
-            //if to make sure the submockit does not already exist
-            if (docSnap.exists()) {
-              setSideBar(docSnap.data().sidebar)
-              setSubMockitSubText(docSnap.data().title)
-              document.title = docSnap.data().title
-            //   document.getElementById('logo').textContent = docSnap.data().title
-            } else {
-                //if the submockit does not exist, this creates the submockit
-                console.log(subMockit + " does not exist");
-            }
-          })
-
-    }, [subMockit])
+}, [subMockit])
 
 
    

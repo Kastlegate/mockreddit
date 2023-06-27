@@ -6,6 +6,7 @@ import { auth,  db } from '../firebase/firebase-config';
 import { arrayUnion, updateDoc, doc, } from 'firebase/firestore';
 
 
+
 // Threads are used to create post in a submockit
 
 function SubMockitThread(props) {
@@ -46,10 +47,13 @@ function SubMockitThread(props) {
 },[props.resetColor])
 
   useEffect(() =>{
+    try{
     const a = props.linkAddress;
-    const hostname = new URL(a).hostname; // "www.google.com"
-    setSiteLink(hostname)
-    
+    const hostname = new URL(a).hostname; 
+    setSiteLink(hostname)   
+    } catch(error){
+        console.log('error')
+    }
   }, [props.resetColor])
 
 
@@ -57,7 +61,6 @@ function SubMockitThread(props) {
     const handleUpVote = (e) => {
         const user = auth.currentUser;
         if(user){
-            //if the upvote button was clicked
             if(e.target.getAttribute('data-upvoteid'))
             {
                 const id = e.target.getAttribute('data-upvoteid');
@@ -67,10 +70,12 @@ function SubMockitThread(props) {
                 if(props.upVoters.indexOf(user.uid) > -1){
                     let index = props.upVoters.indexOf(user.uid)
                     //removes the current user from the upvoters array for the comment
-  
+                    console.log(props.upVoters)
                     props.upVoters.splice(index, 1)
+                    console.log(props.upVoters)
                     updateDoc(doc(db, props.path), {
-                        upVoters: props.upVoters
+                        upVoters: props.upVoters,
+                        voteScore: votesTotal(props.upVoters.length, props.downVoters.length)
                         })
                         setUpvoteColor()
                         
@@ -83,20 +88,24 @@ function SubMockitThread(props) {
                     let index = props.upVoters.indexOf(user.uid)
                     e.target.style.borderBottomColor = 'orange';
                     props.downVoters.splice(index, 1)
+                    props.upVoters.push(user.uid)
                     updateDoc(doc(db, props.path), {
                         downVoters: props.downVoters,
-                        upVoters: arrayUnion(user.uid)
+                        upVoters: arrayUnion(user.uid),
+                        voteScore: votesTotal(props.upVoters.length, props.downVoters.length)
                         })
                         setUpvoteColor(orange)
-                        props.upVoters.push(user.uid)
+                        
                         setDownVoteColor()
                         setVoteCount(voteCount + 2)
                 }
                 else{
+                    props.upVoters.push(user.uid)
                     updateDoc(doc(db, props.path), {
-                        upVoters: arrayUnion(user.uid)
+                        upVoters: arrayUnion(user.uid),
+                        voteScore: votesTotal(props.upVoters.length, props.downVoters.length)
                         })
-                        props.upVoters.push(user.uid)
+                        
                         setUpvoteColor(orange)
                     setVoteCount(voteCount + 1)
                 }   
@@ -119,7 +128,8 @@ function SubMockitThread(props) {
    
                     props.downVoters.splice(index, 1)
                     updateDoc(doc(db, props.path), {
-                        downVoters: props.downVoters
+                        downVoters: props.downVoters,
+                        voteScore: votesTotal(props.upVoters.length, props.downVoters.length)
                         })
                         setDownVoteColor()
                         setVoteCount(voteCount + 1)
@@ -131,21 +141,26 @@ function SubMockitThread(props) {
                     let index = props.upVoters.indexOf(user.uid)
                     
                     props.upVoters.splice(index, 1)
+                    props.downVoters.push(user.uid)
                     updateDoc(doc(db, props.path), {
                         upVoters: props.upVoters,
-                        downVoters: arrayUnion(user.uid)
+                        downVoters: arrayUnion(user.uid),
+                        voteScore: votesTotal(props.upVoters.length, props.downVoters.length)
                         })
-                        props.downVoters.push(user.uid)
+                        
                        setUpvoteColor()
                         setDownVoteColor(bluish)
                         setVoteCount(voteCount - 2)
                 }
                 else{
+             
+                    props.downVoters.push(user.uid)
                     updateDoc(doc(db, props.path), {
-                        downVoters: arrayUnion(user.uid)
+                        downVoters: arrayUnion(user.uid),
+                        voteScore: votesTotal(props.upVoters.length, props.downVoters.length)
                         })
                         setDownVoteColor(bluish)
-                        props.downVoters.push(user.uid)
+                      
                     setVoteCount(voteCount - 1)
                 }   
                 
@@ -178,7 +193,7 @@ function SubMockitThread(props) {
         </div>
 
         <div className='commentsAndSharing'>
-            {props.commentsTotal} <Link to={"/m/" + props.subMockItName + "/" + props.id + "/comments"} className='subMockItLink' > comments</Link> share save hide
+            {props.commentsTotal} <Link to={"/m/" + props.subMockItName + "/" + props.id + "/comments"} className='subMockItLink'  > comments</Link> share save hide
         </div>
       </div>
     </div>
