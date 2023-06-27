@@ -20,7 +20,7 @@ function SubMockitThread(props) {
     const [upVoteColor, setUpvoteColor] = useState()
     const [downVoteColor, setDownVoteColor] = useState()
     const [userName, setUserName] = useState(props.user)
-    const [siteLink, setSiteLink] = useState('https://mockreddit-22590.web.app/')
+    const [siteLink, setSiteLink] = useState(null)
  
     useEffect (() =>{
         const user = auth.currentUser;
@@ -128,7 +128,7 @@ function SubMockitThread(props) {
                     // this else if checks to see if the upvoter array has the user id in it and removes the color from the upvote div and user id from the array, and adds the color to the downvote div and adds the user to the downvoters array
                 else if (props.upVoters.indexOf(user.uid) > -1){
 
-                    let index = props.downVoters.indexOf(user.uid)
+                    let index = props.upVoters.indexOf(user.uid)
                     
                     props.upVoters.splice(index, 1)
                     updateDoc(doc(db, props.path), {

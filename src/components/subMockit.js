@@ -3,7 +3,7 @@ import MockItMenu from './/mockItMenu.js'
 import SubMockitThread from './Threads.js';
 import { db } from '../firebase/firebase-config'
 import UserNavBar from './/userNavBar.js'
-import { onSnapshot, collection, useCollectionData, getDocs, getDoc, setDoc, doc, exists, } from 'firebase/firestore'
+import { onSnapshot, collection, useCollectionData, getDocs, getDoc, setDoc, doc, exists, limit, limitToLast, endBefore, query, orderBy, startAt, startAfter } from 'firebase/firestore'
 import { useEffect, useState } from 'react';
 import Header from './header.js'
 import { getLengthOfTimeSincePosted, votesTotal } from './moreFunctions.js'
@@ -16,19 +16,19 @@ function SubMockit(props) {
 
     const [ sideBar, setSideBar] = useState('')
     const [ subMockitSubText, setSubMockitSubText] = useState('')
+    const [getLastDoc, setGetLastDoc] = useState(null)
+    const [getFirstDoc, setFirstDoc] = useState(null)
+    
 
-     
-    useEffect (() => {
-        const collectionRef = collection(db, "subMockIts", subMockit, 'threads');
+    const getCollectionRef = (ref) =>{
 
         //getdocs to get all of the docs in the submockit collection
-        getDocs(collectionRef).then((snapShot) => {
+        getDocs(ref).then((snapShot) => {
+ 
+            if(snapShot.docs.length > 0){
             const updater = []
-
             snapShot.docs.forEach(thread => {
-                //getdoc to get the username of the user that posted the thread
-                // getDoc(doc(db, 'users', thread.data().postedBy)).then(docSnap => {
-                    // if (docSnap.exists())  {
+
                         const newThread = {
                             linkAddress: thread.data().linkAddress,
                             linkText: thread.data().linkText,
@@ -42,9 +42,9 @@ function SubMockit(props) {
                             id: thread.id,
                             threadPath: thread.ref.path,
                         }
-                         console.log("hi " + newThread.votesTotal)
                         updater.push(newThread)
-                        setSubmockitInfo([...updater])
+                      
+                        
                        
                     // } else {
                     //   console.log("no user")
@@ -53,8 +53,86 @@ function SubMockit(props) {
                 // })
                  
             });
-         
+            setSubmockitInfo([...updater])
+           
+
+           
+                setGetLastDoc(snapShot.docs[snapShot.docs.length -1])
+             setFirstDoc(snapShot.docs[0])
+            
+            // if(!snapShot.docs){
+            //     setGetLastDoc(snapShot.docs[snapShot.docs.length])
+            // }
+          }   // setGetLastDoc(snapShot.docs[snapShot.docs.length -1])
         }) 
+   
+    }  
+const getPrevThreads = () =>{
+    const prevcollectionRef = query(collection(db, "subMockIts", subMockit, 'threads'),  orderBy("postedAt"), endBefore(getFirstDoc), limitToLast(3));
+       
+        
+  
+        getCollectionRef(prevcollectionRef)  
+    
+}
+
+    const getNextThreads = () => {
+        const nextcollectionRef = query(collection(db, "subMockIts", subMockit, 'threads'),  orderBy("postedAt"), startAfter(getLastDoc || 0), limit(3));
+       
+        
+            if(getLastDoc){
+                getCollectionRef(nextcollectionRef)  
+            }
+        
+
+
+              
+
+    }
+     
+    useEffect (() => {
+        const collectionRef = query(collection(db, "subMockIts", subMockit, 'threads'), orderBy("postedAt"),  limit(3));
+
+        getCollectionRef(collectionRef)
+
+
+
+
+
+        // //getdocs to get all of the docs in the submockit collection
+        // getDocs(collectionRef).then((snapShot) => {
+        //     const updater = []
+
+        //     snapShot.docs.forEach(thread => {
+        //         //getdoc to get the username of the user that posted the thread
+        //         // getDoc(doc(db, 'users', thread.data().postedBy)).then(docSnap => {
+        //             // if (docSnap.exists())  {
+        //                 const newThread = {
+        //                     linkAddress: thread.data().linkAddress,
+        //                     linkText: thread.data().linkText,
+        //                     postedAt: getLengthOfTimeSincePosted(thread.data().postedAt),
+        //                     postedBy: thread.data().postedBy, 
+        //                     subMockItName: thread.data().subMockItName,
+        //                     votesTotal: votesTotal(thread.data().upVoters.length, thread.data().downVoters.length),
+        //                     commentsTotal: thread.data().commentsTotal,
+        //                     upVoters: thread.data().upVoters,
+        //                     downVoters: thread.data().downVoters,
+        //                     id: thread.id,
+        //                     threadPath: thread.ref.path,
+        //                 }
+        //                  console.log("hi " + newThread.votesTotal)
+        //                 updater.push(newThread)
+        //                 setSubmockitInfo([...updater])
+                       
+                    // } else {
+                    //   console.log("no user")
+                    // }
+                    
+                // })
+                 
+        //     });
+         
+        // }) 
 
         getDoc(doc(db, 'subMockIts', subMockit)).then(docSnap => {
             //if to make sure the submockit does not already exist
@@ -71,9 +149,6 @@ function SubMockit(props) {
 
     }, [subMockit])
 
-// useEffect(() => {
-//     console.log(subMockitInfo)
-// },[subMockitInfo])
 
    
     return (
@@ -85,8 +160,8 @@ function SubMockit(props) {
                       return (
                         <SubMockitThread id={thread.id} key={thread.id} linkAddress={thread.linkAddress} linkText={thread.linkText} postedAt={thread.postedAt} commentsTotal={thread.commentsTotal} upVoters={thread.upVoters} downVoters={thread.downVoters} user={thread.postedBy} subMockItName={thread.subMockItName} path={thread.threadPath} votesTotal={thread.votesTotal} />
                           )
-                    })}</div>
-     
+                    })}<button  onClick={getPrevThreads}>prev</button><button  onClick={getNextThreads}>next</button></div>
+        
       <MockItMenu sideBar = {sideBar}/>
     </div>
     </div>

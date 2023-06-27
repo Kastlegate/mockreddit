@@ -1,13 +1,19 @@
 import Header from './header.js'
 import UserNavBar from './userNavBar.js'
-import { getLengthOfTimeSincePosted, votesTotal } from './moreFunctions.js'
+import { 
+  getLengthOfTimeSincePosted,
+  votesTotal, 
+  sortTimeNewest,
+  sortMostUpvotes,
+  sortBest
+ } from './moreFunctions.js'
 import { useParams } from 'react-router-dom';
 import '../style/home.css';
 import SubMockitThread from './/Threads.js'
 import MockItMenu from './/mockItMenu.js'
 import SignUpForm from './/signUpForm.js'
 import { db, auth } from '../firebase/firebase-config'
-import { onSnapshot, collection, collectionGroup, where, query, useCollectionData, getDocs, getDoc, setDoc, doc, exists, orderBy, } from 'firebase/firestore'
+import { onSnapshot, collection, collectionGroup, where, limit, query, useCollectionData, getDocs, getDoc, setDoc, doc, exists, orderBy, } from 'firebase/firestore'
 import { useState, useEffect } from 'react';
 
 
@@ -16,32 +22,7 @@ function Home(props) {
 
 const [threads, setThreads] = useState([])
 const [loading, setLoading] = useState(true)
-const sortTimeNewest = (array, sortedArray) => {
-    sortedArray =  array.sort(function(a, b) { 
-    if (Number(a.secondsCounter) > Number(b.secondsCounter)) return 1;
-    if (Number(a.secondsCounter) < Number(b.secondsCounter)) return -1;
-    return 0;
-  })
-  return sortedArray
-}
 
-const sortMostUpvotes = (array, sortedArray) => {
-  sortedArray =  array.sort(function(a, b) { 
-  if (Number(a.votesTotal / (a.secondsCounter / 1000)) < Number(b.votesTotal / (b.secondsCounter / 1000))) return 1;
-  if (Number(a.votesTotal / (a.secondsCounter / 1000)) > Number(b.votesTotal / (b.secondsCounter / 1000))) return -1;
-  return 0;
-})
-return sortedArray
-}
-
-const sortBest = (array, sortedArray) => {
-  sortedArray =  array.sort(function(a, b) { 
-  if (Number(a.votesTotal / a.secondsCounter) < Number(b.votesTotal / b.secondsCounter)) return 1;
-  if (Number(a.votesTotal / a.secondsCounter) > Number(b.votesTotal / b.secondsCounter)) return -1;
-  return 0;
-})
-return sortedArray
-}
 
 useEffect(() => {
   
@@ -55,9 +36,11 @@ useEffect(() => {
     if(user){
       
       getDoc(doc(db, 'users', currentUser.uid)).then(userdocSnap => { 
+        // Using the subscribedsubmockits array in the user doc to load documents from each submockit the user is subscribed to
         const subMockitsArray = userdocSnap.data().subcribedSubMockits
         subMockitsArray.forEach(submockit => {
-          const collectionRef = collection(db, "subMockIts", submockit, 'threads');
+          // const collectionRef = query(collection(db, "subMockIts", submockit, 'threads'), orderBy('postedAt'), limit(1));
+          const collectionRef = collection(db, "subMockIts", submockit, 'threads')
           getDocs(collectionRef).then((snapShot) => {
             if(snapShot){
               snapShot.docs.forEach(thread => {
@@ -83,28 +66,26 @@ useEffect(() => {
                    updater.push(newThread)
                    setLoading(true)
             })
-                              // console.log(newThread)
-                             
-                              let newUpdater = []
-                              
-                              newUpdater = sortMostUpvotes(updater, newUpdater)
+                // console.log(newThread)
+                
+                let newUpdater = []
+                
+                newUpdater = sortBest(updater, newUpdater)
 
-                             setThreads([...newUpdater])
-                             setLoading(false)
+                setThreads([...updater])
+                setLoading(false)
             }
            })
         })
-       
-  
       })
-     
     }
     
     
   }
   else{
     const updater = []
-    const collectionRef = query(collectionGroup(db, "threads"), orderBy("postedAt", 'desc'))
+    // grabs the newest 25 threads from all subreddit if no user is logged in
+    const collectionRef = query(collectionGroup(db, "threads"), orderBy("postedAt", 'desc'), limit(25))
     getDocs(collectionRef).then((snapShot) => {
         if(snapShot){
             snapShot.docs.forEach(thread => {
@@ -125,18 +106,14 @@ useEffect(() => {
                   commentsTotal: thread.data().commentsTotal,
                   threadPath: thread.ref.path,
                   }
-                  // console.log(newThread)
+                  
                   updater.push(newThread)
                   setLoading(true)
             })
 
               let newUpdater = []
-              newUpdater =  updater.sort(function(a, b) { 
-              if (Number(a.secondsCounter) > Number(b.secondsCounter)) return 1;
-              if (Number(a.secondsCounter) < Number(b.secondsCounter)) return -1;
-              return 0;
-              })
 
+              newUpdater = sortTimeNewest(updater, newUpdater)
             setThreads([...newUpdater])
             
         }

@@ -52,5 +52,38 @@ const getLengthOfTimeSincePosted = (postedDate) =>{
     return total;
   }
 
+  const sortTimeNewest = (array, sortedArray) => {
+    sortedArray =  array.sort(function(a, b) { 
+    if (Number(a.secondsCounter) > Number(b.secondsCounter)) return 1;
+    if (Number(a.secondsCounter) < Number(b.secondsCounter)) return -1;
+    return 0;
+  })
+  return sortedArray
+}
 
-  export {getLengthOfTimeSincePosted, votesTotal}
+const sortMostUpvotes = (array, sortedArray) => {
+  sortedArray =  array.sort(function(a, b) { 
+  if (Number(a.votesTotal) < Number(b.votesTotal)) return 1;
+  if (Number(a.votesTotal) > Number(b.votesTotal)) return -1;
+  return 0;
+})
+return sortedArray
+}
+
+const sortBest = (array, sortedArray) => {
+  sortedArray =  array.sort(function(a, b) { 
+  if (Number(a.votesTotal / (a.secondsCounter / 1000)) < Number(b.votesTotal / (b.secondsCounter / 1000))) return 1;
+  if (Number(a.votesTotal / (a.secondsCounter / 1000)) > Number(b.votesTotal / (b.secondsCounter / 1000))) return -1;
+  return 0;
+})
+return sortedArray
+}
+
+
+  export {
+    getLengthOfTimeSincePosted,
+    votesTotal,
+    sortTimeNewest,
+    sortMostUpvotes,
+    sortBest
+    }
