@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { app, db, auth, } from '../firebase/firebase-config'
 import { addDoc, collection, getDocs, getDoc, setDoc, doc, exists } from 'firebase/firestore'
+import { votesTotal } from './moreFunctions'
 import '../style/createSubMockitMenu.css';
 
 function CreateNewLinkMenu(props) {
@@ -9,7 +10,7 @@ function CreateNewLinkMenu(props) {
     const { subMockit } = useParams()
     const [linkAddress, setlinkAddress] = useState('')
     const [threadTitle, setthreadTitle] = useState('')
-    const [postTo, setpostTo] = useState('')
+    const [postTo, setpostTo] = useState(null)
 
     const showMainContent = () =>{
         let mainContent = document.querySelector('.SubMockitThread')
@@ -20,7 +21,7 @@ function CreateNewLinkMenu(props) {
     }
     const submockitNamer = () => {
 
-        if (postTo === '' && subMockit){
+        if (postTo === null && subMockit){
             setpostTo(subMockit)
         }
         else if(postTo === '' && !subMockit){
@@ -29,11 +30,11 @@ function CreateNewLinkMenu(props) {
         return postTo
         
     }
-
+submockitNamer()
     const handleSubmit = (e) => {
         e.preventDefault()
-        submockitNamer()
-        if(postTo !== ''){
+        
+        if(postTo !== null){
             getDoc(doc(db, 'subMockIts', postTo)).then(docSnap => {
             
                 
@@ -50,7 +51,8 @@ function CreateNewLinkMenu(props) {
                                 postedBy: userdocSnap.data().userName,
                                 postedById: currentuser.uid,
                                 subMockItName: postTo,
-                                commentsTotal: 0
+                                commentsTotal: 0,
+                                voteScore: votesTotal(1, 0)
                             });
                        
                         
@@ -66,6 +68,9 @@ function CreateNewLinkMenu(props) {
                     alert("That subreddit does not exist!")
                 }
             })
+        }
+        else{
+            alert("Please put in a submockit to post to")
         }
 
 

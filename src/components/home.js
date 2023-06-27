@@ -29,8 +29,7 @@ const [subbedMockits, setSubbedMockits] = useState(null)
 
 const getCollectionRef = (ref) => {
   const updater = []
-  // grabs the newest 25 threads from all subreddit if no user is logged in
-  // const collectionRef = query(collectionGroup(db, "threads"), orderBy("postedAt", 'desc'), limit(15))
+
   getDocs(ref).then((snapShot) => {
       if(snapShot){
         if(snapShot.docs.length > 0){
@@ -59,8 +58,8 @@ const getCollectionRef = (ref) => {
 
             let newUpdater = []
             setLoading(false)
-            newUpdater = sortTimeNewest(updater, newUpdater)
-          setThreads([...updater])
+            newUpdater = sortMostUpvotes(updater, newUpdater)
+          setThreads([...newUpdater])
           setGetLastDoc(snapShot.docs[snapShot.docs.length -1])
           setFirstDoc(snapShot.docs[0])
           
@@ -78,14 +77,14 @@ const getPrevThreads = () =>{
   const user = auth.currentUser;
   if(user){
     const prevcollectionRef = query(collectionGroup(db, "threads"), where("subMockItName", "in", subbedMockits ), 
-    orderBy("postedAt", 'desc'), endBefore(getFirstDoc), 
-    limitToLast(5));
+    orderBy("voteScore", 'desc'), endBefore(getFirstDoc), 
+    limitToLast(25));
   
     getCollectionRef(prevcollectionRef) 
   }else{
     const prevcollectionRef = query(collectionGroup(db, "threads"), 
-    orderBy("postedAt", 'desc'), endBefore(getFirstDoc), 
-    limitToLast(5));
+    orderBy("voteScore", 'desc'), endBefore(getFirstDoc), 
+    limitToLast(25));
   
     getCollectionRef(prevcollectionRef) 
   }
@@ -96,7 +95,7 @@ const getNextThreads = () => {
   
   const user = auth.currentUser;
   if(user){
-    const nextcollectionRef = query(collectionGroup(db, "threads"), where("subMockItName", "in", subbedMockits ), orderBy("postedAt", 'desc'),  startAfter(getLastDoc || 0), limit(5));
+    const nextcollectionRef = query(collectionGroup(db, "threads"), where("subMockItName", "in", subbedMockits ), orderBy("voteScore", 'desc'),  startAfter(getLastDoc || 0), limit(25));
       if(getLastDoc){
       getCollectionRef(nextcollectionRef)  
   }
@@ -105,8 +104,8 @@ const getNextThreads = () => {
   else{
       
   const nextcollectionRef = query(collectionGroup(db, "threads"),
-    orderBy("postedAt", 'desc'), 
-    startAfter(getLastDoc || 0), limit(5));
+    orderBy("voteScore", 'desc'), 
+    startAfter(getLastDoc || 0), limit(25));
   // const collectionRef = query(collectionGroup(db, "threads"), orderBy("postedAt", 'desc'), limit(15))
 
   if(getLastDoc){
@@ -133,7 +132,7 @@ useEffect(() => {
         getDoc(doc(db, 'users', currentuser.uid)).then(docSnap => {
           if (docSnap.exists()) {
             setSubbedMockits(docSnap.data().subcribedSubMockits)
-              const collectionRef = query(collectionGroup(db, "threads"), where("subMockItName", "in", docSnap.data().subcribedSubMockits ), orderBy("postedAt", 'desc'), limit(5))
+              const collectionRef = query(collectionGroup(db, "threads"), where("subMockItName", "in", docSnap.data().subcribedSubMockits ), orderBy("voteScore", 'desc'), limit(25))
               getCollectionRef(collectionRef)
               
           } else {
@@ -143,118 +142,13 @@ useEffect(() => {
        
       }
       else{
-        const collectionRef = query(collectionGroup(db, "threads"),  orderBy("postedAt", 'desc'), limit(5));
+        const collectionRef = query(collectionGroup(db, "threads"),  orderBy("voteScore", 'desc'), limit(25));
             getCollectionRef(collectionRef)
       }
     })
 
 
 
-
-  
-  // else{
-  //     const collectionRef = query(collectionGroup(db, "threads"),  orderBy("postedAt", 'desc'), limit(25));
-  //     getCollectionRef(collectionRef)
-  // }
-
-
-  // if a user exists, loads the comments from the user's subscribed submockits, else it loads the default submockit posts 
-  // if(user){
-  //   let updater = []
-  //   setLoading(false)
-  //   const currentUser = auth.currentUser;
-  //   if(user){
-      
-  //     getDoc(doc(db, 'users', currentUser.uid)).then(userdocSnap => { 
-  //       // Using the subscribedsubmockits array in the user doc to load documents from each submockit the user is subscribed to
-  //       // const subMockitsArray = userdocSnap.data().subcribedSubMockits
-  //       // subMockitsArray.forEach(submockit => {
-  //         // const collectionRef = query(collection(db, "subMockIts", submockit, 'threads'), orderBy('postedAt'), limit(1));
-  //         // const collectionRef = collection(db, "subMockIts", submockit, 'threads')
-  //         const collectionRef = query(collectionGroup(db, "threads"), where("subMockItName", "in", userdocSnap.data().subcribedSubMockits ), orderBy("postedAt", 'desc'), limit(15))
-
-  //         getDocs(collectionRef).then((snapShot) => {
-  //           if(snapShot){
-  //             snapShot.docs.forEach(thread => {
-  //               const date = new Date(thread.data().postedAt)
-  //               const date2 = new Date();
-  //               const seconds = (date2.getTime() - date.getTime()) / 1000;
-
-  //               const newThread = {
-  //                 id: thread.id,
-  //                 postedAt: getLengthOfTimeSincePosted(thread.data().postedAt),
-  //                 secondsCounter: Number(seconds),
-  //                 linkAddress: thread.data().linkAddress,
-  //                 subMockItName: thread.data().subMockItName,
-  //                 postedBy: thread.data().postedBy,
-  //                 linkText: thread.data().linkText,
-  //                 votesTotal: votesTotal(thread.data().upVoters.length, thread.data().downVoters.length),
-  //                 upVoters: thread.data().upVoters,
-  //                 downVoters: thread.data().downVoters,
-  //                 commentsTotal: thread.data().commentsTotal,
-  //                 threadPath: thread.ref.path,
-  //                 }
-
-  //                  updater.push(newThread)
-  //                  setLoading(true)
-  //           })
-  //               // console.log(newThread)
-                
-  //               let newUpdater = []
-                
-  //               newUpdater = sortBest(updater, newUpdater)
-
-  //               setThreads([...updater])
-  //               setLoading(false)
-  //           }
-  //          })
-  //       // })
-  //     })
-  //   }
-    
-    
-  // }
-  // else{
-  //   const updater = []
-  //   // grabs the newest 25 threads from all subreddit if no user is logged in
-  //   const collectionRef = query(collectionGroup(db, "threads"), orderBy("postedAt", 'desc'), limit(15))
-  //   getDocs(collectionRef).then((snapShot) => {
-  //       if(snapShot){
-  //           snapShot.docs.forEach(thread => {
-  //             const date = new Date(thread.data().postedAt)
-  //             const date2 = new Date();
-  //             const seconds = (date2.getTime() - date.getTime()) / 1000;
-
-  //               const newThread = { id: thread.id,
-  //                 postedAt: getLengthOfTimeSincePosted(thread.data().postedAt),
-  //                 secondsCounter: Number(seconds),
-  //                 linkAddress: thread.data().linkAddress,
-  //                 subMockItName: thread.data().subMockItName,
-  //                 postedBy: thread.data().postedBy,
-  //                 linkText: thread.data().linkText,
-  //                 votesTotal: votesTotal(thread.data().upVoters.length, thread.data().downVoters.length),
-  //                 upVoters: thread.data().upVoters,
-  //                 downVoters: thread.data().downVoters,
-  //                 commentsTotal: thread.data().commentsTotal,
-  //                 threadPath: thread.ref.path,
-  //                 }
-                  
-  //                 updater.push(newThread)
-  //                 setLoading(true)
-  //           })
-
-  //             let newUpdater = []
-
-  //             newUpdater = sortTimeNewest(updater, newUpdater)
-  //           setThreads([...newUpdater])
-            
-  //       }
-  //   }).then(() =>{
-  //     setLoading(false)
-  //   })
-   
-  // }
- 
 
 
 }, [])

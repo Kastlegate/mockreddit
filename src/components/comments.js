@@ -173,6 +173,7 @@ const handleSubmit = (e) =>{
                     thread: thread,
                     linkText: currentThread.linkText,
                     linkAddress: currentThread.linkAddress,
+                    voteScore: votesTotal(1, 0)
                 });
                                 })
 
@@ -216,7 +217,8 @@ const handleReply = (e, value, path) => {
                 postedTo: subMockit,
                 thread: thread,
                 linkText: currentThread.linkText,
-                linkAddress: currentThread.linkAddress,                    
+                linkAddress: currentThread.linkAddress,
+                voteScore: votesTotal(1, 0)                    
             })
         
                     // updates the number of comments on the thread
