@@ -37,10 +37,12 @@ useEffect(() => {
       
       getDoc(doc(db, 'users', currentUser.uid)).then(userdocSnap => { 
         // Using the subscribedsubmockits array in the user doc to load documents from each submockit the user is subscribed to
-        const subMockitsArray = userdocSnap.data().subcribedSubMockits
-        subMockitsArray.forEach(submockit => {
+        // const subMockitsArray = userdocSnap.data().subcribedSubMockits
+        // subMockitsArray.forEach(submockit => {
           // const collectionRef = query(collection(db, "subMockIts", submockit, 'threads'), orderBy('postedAt'), limit(1));
-          const collectionRef = collection(db, "subMockIts", submockit, 'threads')
+          // const collectionRef = collection(db, "subMockIts", submockit, 'threads')
+          const collectionRef = query(collectionGroup(db, "threads"), where("subMockItName", "in", userdocSnap.data().subcribedSubMockits ), orderBy("postedAt", 'desc'), limit(25))
+
           getDocs(collectionRef).then((snapShot) => {
             if(snapShot){
               snapShot.docs.forEach(thread => {
@@ -76,7 +78,7 @@ useEffect(() => {
                 setLoading(false)
             }
            })
-        })
+        // })
       })
     }
     

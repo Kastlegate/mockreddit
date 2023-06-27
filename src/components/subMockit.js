@@ -59,16 +59,13 @@ function SubMockit(props) {
            
                 setGetLastDoc(snapShot.docs[snapShot.docs.length -1])
              setFirstDoc(snapShot.docs[0])
-            
-            // if(!snapShot.docs){
-            //     setGetLastDoc(snapShot.docs[snapShot.docs.length])
-            // }
-          }   // setGetLastDoc(snapShot.docs[snapShot.docs.length -1])
+
+          } 
         }) 
    
     }  
 const getPrevThreads = () =>{
-    const prevcollectionRef = query(collection(db, "subMockIts", subMockit, 'threads'),  orderBy("postedAt"), endBefore(getFirstDoc), limitToLast(3));
+    const prevcollectionRef = query(collection(db, "subMockIts", subMockit, 'threads'),  orderBy("postedAt"), endBefore(getFirstDoc), limitToLast(5));
        
         
   
@@ -77,7 +74,7 @@ const getPrevThreads = () =>{
 }
 
     const getNextThreads = () => {
-        const nextcollectionRef = query(collection(db, "subMockIts", subMockit, 'threads'),  orderBy("postedAt"), startAfter(getLastDoc || 0), limit(3));
+        const nextcollectionRef = query(collection(db, "subMockIts", subMockit, 'threads'),  orderBy("postedAt"), startAfter(getLastDoc || 0), limit(5));
        
         
             if(getLastDoc){
@@ -91,7 +88,7 @@ const getPrevThreads = () =>{
     }
      
     useEffect (() => {
-        const collectionRef = query(collection(db, "subMockIts", subMockit, 'threads'), orderBy("postedAt"),  limit(3));
+        const collectionRef = query(collection(db, "subMockIts", subMockit, 'threads'), orderBy("postedAt"),  limit(5));
 
         getCollectionRef(collectionRef)
 
