@@ -151,7 +151,8 @@ useEffect (() => {
         <div id='mockItMenuContainer'>
           <input type="text" id="mockItSearch" placeholder="search" ></input>
           <button className='mockItButton' onClick={(e) => createNewLinkHandler(e)}>Submit a new link</button>
-          <button className='mockItButton'>Submit a new text post</button>
+          {/* self text post to be added */}
+          {/* <button className='mockItButton'>Submit a new text post</button> */}
           <button className='mockItButton' onClick={(e) => createSubMockitHandler(e)}>Create your own submockit</button>
           <div id="mockItMenuSidebar">{props.sideBar}</div>
           {showSubscribeButton ? <div className='subscriptionContainer'>

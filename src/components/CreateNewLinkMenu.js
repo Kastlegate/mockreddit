@@ -22,7 +22,8 @@ function CreateNewLinkMenu(props) {
     const submockitNamer = () => {
 
         if (postTo === null && subMockit){
-            setpostTo(subMockit)
+            const name = subMockit
+            setpostTo(name)
         }
         else if(postTo === '' && !subMockit){
             alert("Please put in a submockit to post to")
@@ -30,11 +31,27 @@ function CreateNewLinkMenu(props) {
         return postTo
         
     }
+
+    const addHTTPS = (str) =>
+    {
+        
+        if (!str.indexOf("http://") == 0 && !str.indexOf("https://") == 0) {
+            str = "https://" + str 
+            console.log(str)
+            return str
+    }
+
+    else{
+        return str
+    }
+}
+
 submockitNamer()
     const handleSubmit = (e) => {
         e.preventDefault()
-        
-        if(postTo !== null){
+        submockitNamer()
+        if(postTo){
+            console.log(postTo)
             getDoc(doc(db, 'subMockIts', postTo)).then(docSnap => {
             
                 
@@ -44,7 +61,7 @@ submockitNamer()
                         if (userdocSnap.exists()) {
                             const docRef = addDoc(collection(db, "subMockIts", postTo, 'threads'), {
                                 linkText: threadTitle,
-                                linkAddress: linkAddress,
+                                linkAddress: addHTTPS(linkAddress),
                                 postedAt: Date(),
                                 downVoters: [],
                                 upVoters: [currentuser.uid],

@@ -22,6 +22,21 @@ function SubMockitThread(props) {
     const [downVoteColor, setDownVoteColor] = useState()
     const [userName, setUserName] = useState(props.user)
     const [siteLink, setSiteLink] = useState(null)
+
+    const addHTTPS = (str) =>
+    {
+        
+        if (!str.indexOf("http://") == 0 && !str.indexOf("https://") == 0) {
+            str = "https://" + str 
+            console.log(str)
+            return str
+    }
+
+    else{
+        return str
+    }
+}
+
  
     useEffect (() =>{
         const user = auth.currentUser;
@@ -48,13 +63,16 @@ function SubMockitThread(props) {
 
   useEffect(() =>{
     try{
-    const a = props.linkAddress;
-    const hostname = new URL(a).hostname; 
-    setSiteLink(hostname)   
+        const a = addHTTPS(props.linkAddress);
+        console.log(a)
+        // addHTTPS(a)
+        console.log(a)
+        const hostname = new URL(a).hostname; 
+        setSiteLink(hostname)   
     } catch(error){
-        console.log('error')
+        console.log('not a valid url')
     }
-  }, [props.resetColor])
+  }, [props.linkAddress])
 
 
  
