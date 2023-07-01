@@ -9,12 +9,12 @@
 }
 
 #addToBottomLeft{
-    height: 40px;
+    height: fit-content;
     display: flex;
     flex-direction: row;
     -ms-flex-align: center; 
     position: absolute;
-    bottom: 0;  
+    bottom: 0px;  
 }
 
 #logo{
@@ -25,9 +25,12 @@
 }
 
 .logoText{
+    height: fit-content;
+    width: fit-content;
     text-decoration: none;
      font-size: 40px;
      color: inherit;
+     margin: 0px 0px 0px 0px
 }
 
 .logoSubText{
@@ -35,7 +38,7 @@
     height: fit-content;
     width: fit-content;
     font-size: 25px;
-    margin: auto auto 5px 10px;
+    margin: auto auto 1px 10px;
     color: inherit;
 }
 

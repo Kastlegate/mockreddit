@@ -25,6 +25,8 @@ const [loading, setLoading] = useState(true)
 const [getLastDoc, setGetLastDoc] = useState(null)
 const [getFirstDoc, setFirstDoc] = useState(null)
 const [subbedMockits, setSubbedMockits] = useState(null)
+const [sortValue, setSortValue] = useState('timestamp') 
+const [loadAll, setLoadAll] = useState(false)
 
 
 const getCollectionRef = (ref) => {
@@ -34,7 +36,7 @@ const getCollectionRef = (ref) => {
       if(snapShot){
         if(snapShot.docs.length > 0){
           snapShot.docs.forEach(thread => {
-            const date = new Date(thread.data().postedAt)
+            const date = new Date(thread.data().timestamp)
             const date2 = new Date();
             const seconds = (date2.getTime() - date.getTime()) / 1000;
 
@@ -50,6 +52,7 @@ const getCollectionRef = (ref) => {
                 downVoters: thread.data().downVoters,
                 commentsTotal: thread.data().commentsTotal,
                 threadPath: thread.ref.path,
+                timestamp: thread.data().timestamp
                 }
                 
                 updater.push(newThread)
@@ -58,8 +61,8 @@ const getCollectionRef = (ref) => {
 
             let newUpdater = []
             setLoading(false)
-            newUpdater = sortTimeNewest(updater, newUpdater)
-          setThreads([...newUpdater])
+            // newUpdater = sortTimeNewest(updater, newUpdater)
+          setThreads([...updater])
           setGetLastDoc(snapShot.docs[snapShot.docs.length -1])
           setFirstDoc(snapShot.docs[0])
           
@@ -72,16 +75,16 @@ const getCollectionRef = (ref) => {
 const getPrevThreads = () =>{
  
   const user = auth.currentUser;
-  if(user){
+  if(user  && loadAll === false){
     const prevcollectionRef = query(collectionGroup(db, "threads"), where("subMockItName", "in", subbedMockits ), 
-    orderBy("voteScore", 'desc'), endBefore(getFirstDoc), 
-    limitToLast(25));
+    orderBy(sortValue, 'desc'), endBefore(getFirstDoc), 
+    limitToLast(15));
   
     getCollectionRef(prevcollectionRef) 
   }else{
     const prevcollectionRef = query(collectionGroup(db, "threads"), 
-    orderBy("voteScore", 'desc'), endBefore(getFirstDoc), 
-    limitToLast(25));
+    orderBy(sortValue, 'desc'), endBefore(getFirstDoc), 
+    limitToLast(15));
   
     getCollectionRef(prevcollectionRef) 
   }
@@ -91,8 +94,8 @@ const getPrevThreads = () =>{
 const getNextThreads = () => {
   
   const user = auth.currentUser;
-  if(user){
-    const nextcollectionRef = query(collectionGroup(db, "threads"), where("subMockItName", "in", subbedMockits ), orderBy("postedAt", 'desc'),  startAfter(getLastDoc || 0), limit(25));
+  if(user  && loadAll === false){
+    const nextcollectionRef = query(collectionGroup(db, "threads"), where("subMockItName", "in", subbedMockits ), orderBy(sortValue, 'desc'),  startAfter(getLastDoc || 0), limit(15));
       if(getLastDoc){
       getCollectionRef(nextcollectionRef)  
   }
@@ -101,9 +104,9 @@ const getNextThreads = () => {
   else{
       
   const nextcollectionRef = query(collectionGroup(db, "threads"),
-    orderBy("postedAt", 'desc'), 
-    startAfter(getLastDoc || 0), limit(25));
-  // const collectionRef = query(collectionGroup(db, "threads"), orderBy("postedAt", 'desc'), limit(15))
+    orderBy(sortValue, 'desc'), 
+    startAfter(getLastDoc || 0), limit(15));
+  // const collectionRef = query(collectionGroup(db, "threads"), orderBy("postedAt", 'desc'), limit(115))
 
   if(getLastDoc){
       getCollectionRef(nextcollectionRef)  
@@ -124,18 +127,18 @@ useEffect(() => {
 
 
     auth.onAuthStateChanged(currentuser => {
-      if(currentuser){
+      if(currentuser && sortValue != 'all'){
         
         getDoc(doc(db, 'users', currentuser.uid)).then(docSnap => {
           if (docSnap.exists()) {
 
-            if(docSnap.data().subcribedSubMockits.length > 0){
+            if(docSnap.data().subcribedSubMockits.length > 0 && loadAll === false){
               setSubbedMockits(docSnap.data().subcribedSubMockits)
-              const collectionRef = query(collectionGroup(db, "threads"), where("subMockItName", "in", docSnap.data().subcribedSubMockits ), orderBy("voteScore", 'desc'), limit(25))
+              const collectionRef = query(collectionGroup(db, "threads"), where("subMockItName", "in", docSnap.data().subcribedSubMockits ), orderBy(sortValue, 'desc'), limit(15))
               getCollectionRef(collectionRef)
             }
             else{
-              const collectionRef = query(collectionGroup(db, "threads"),  orderBy("postedAt", 'desc'), limit(25));
+              const collectionRef = query(collectionGroup(db, "threads"),  orderBy(sortValue, 'desc'), limit(15));
               getCollectionRef(collectionRef)
             }
 
@@ -148,7 +151,7 @@ useEffect(() => {
        
       }
       else{
-        const collectionRef = query(collectionGroup(db, "threads"),  orderBy("voteScore", 'desc'), limit(25));
+        const collectionRef = query(collectionGroup(db, "threads"),  orderBy(sortValue, 'desc'), limit(15));
             getCollectionRef(collectionRef)
       }
     })
@@ -157,7 +160,7 @@ useEffect(() => {
 
 
 
-}, [])
+}, [sortValue, loadAll])
 
   
 
@@ -165,7 +168,7 @@ useEffect(() => {
     return (
       <div>
         <Header />
-        <UserNavBar />
+        <UserNavBar sort={setSortValue} loadAll={setLoadAll} />
 
       <div id="mainContent" >
 

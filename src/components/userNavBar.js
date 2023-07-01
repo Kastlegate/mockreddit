@@ -20,6 +20,52 @@ function UserNavBar(props) {
   const { subMockit } = useParams()
   const [ logoSubText, setlogoSubText ] = useState('');
   const [currentLogo, setCurrentLogo] = useState('')
+  const setSortOrder = (e) =>{
+
+    let newStyle = document.getElementById('timestamp')
+    let bestStyle = document.getElementById('voteScore')
+    let allStyle = document.getElementById('all')
+
+    if(e.target.id === 'timestamp'){
+      props.loadAll(false)
+      props.sort(e.target.id)
+      bestStyle.classList = ''
+      bestStyle.className = 'sortChoice'
+      newStyle.classList = ''
+      newStyle.className = 'sortChoiceSelected'
+      allStyle.classList = ''
+      allStyle.className = 'sortChoice'
+
+    }
+    else if(e.target.id === 'voteScore'){
+      props.loadAll(false)
+      props.sort(e.target.id)
+      bestStyle.classList = ''
+      bestStyle.className = 'sortChoiceSelected'
+      newStyle.classList = ''
+      newStyle.className = 'sortChoice'
+      allStyle.classList = ''
+      allStyle.className = 'sortChoice'
+      
+
+    }
+    else if(e.target.id === 'all'){
+      props.loadAll(true)
+      bestStyle.classList = ''
+      bestStyle.className = 'sortChoice'
+      newStyle.classList = ''
+      newStyle.className = 'sortChoice'
+      allStyle.classList = ''
+      allStyle.className = 'sortChoiceSelected'
+    }
+    
+    
+  }
+
+  const loadAllThread = (e) =>{
+    console.log("clicked")
+    props.loadAll(true)
+  }
   
 
 //checks the auth state 
@@ -123,9 +169,9 @@ useEffect(() => {
         <div id='addToBottomLeft'>
             <div id="logo"><Link to={"/"} className='logoText'>mockit</Link> <Link   to={"/m/" + subMockit } className='logoSubText'>{logoSubText}</Link></div>
             <ul id="sortMenu">
-                <div className='sortChoiceSelected'>new</div>
-                <div className='sortChoice'>best</div>
-                <div className='sortChoice'>all</div>
+                <div className='sortChoiceSelected'  id="timestamp" onClick={(e) => setSortOrder(e)}>new</div>
+                <div className='sortChoice' id="voteScore" onClick={(e) => setSortOrder(e)}>best</div>
+                <div className='sortChoice' id="all" onClick={(e) => setSortOrder(e)}>all</div>
 
             </ul>
         </div>
