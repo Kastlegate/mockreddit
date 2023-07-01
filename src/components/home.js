@@ -58,7 +58,7 @@ const getCollectionRef = (ref) => {
 
             let newUpdater = []
             setLoading(false)
-            newUpdater = sortBest(updater, newUpdater)
+            newUpdater = sortMostUpvotes(updater, newUpdater)
           setThreads([...newUpdater])
           setGetLastDoc(snapShot.docs[snapShot.docs.length -1])
           setFirstDoc(snapShot.docs[0])
@@ -67,9 +67,6 @@ const getCollectionRef = (ref) => {
     }
   })
 }
-
-
-
 
 
 const getPrevThreads = () =>{

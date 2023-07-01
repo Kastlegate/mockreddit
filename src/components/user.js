@@ -34,7 +34,7 @@ function User(props) {
 
 useEffect(() => {
 
-    const updater = [] //// CREATE A STRING BASED ON THE WHERE HERE FOR THE HOMEPAGE, WHERE USER WOULD BE THE SUBMOCKIT FROM THE SUBSCRIBED SUBMOCKITS?
+    const updater = [] 
     const collectionRef = query(collectionGroup(db, "comments"), where("postedBy", "==", user))
     getDocs(collectionRef).then((snapShot) => {
         if(snapShot){

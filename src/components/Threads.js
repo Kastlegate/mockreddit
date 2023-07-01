@@ -28,7 +28,7 @@ function SubMockitThread(props) {
         
         if (!str.indexOf("http://") == 0 && !str.indexOf("https://") == 0) {
             str = "https://" + str 
-            console.log(str)
+            
             return str
     }
 
@@ -58,15 +58,13 @@ function SubMockitThread(props) {
   useEffect (() =>{
 
     setUserName(props.user)
-    console.log(props.user)
+
 },[props.resetColor])
 
   useEffect(() =>{
     try{
         const a = addHTTPS(props.linkAddress);
-        console.log(a)
-        // addHTTPS(a)
-        console.log(a)
+
         const hostname = new URL(a).hostname; 
         setSiteLink(hostname)   
     } catch(error){
@@ -88,9 +86,7 @@ function SubMockitThread(props) {
                 if(props.upVoters.indexOf(user.uid) > -1){
                     let index = props.upVoters.indexOf(user.uid)
                     //removes the current user from the upvoters array for the comment
-                    console.log(props.upVoters)
                     props.upVoters.splice(index, 1)
-                    console.log(props.upVoters)
                     updateDoc(doc(db, props.path), {
                         upVoters: props.upVoters,
                         voteScore: votesTotal(props.upVoters.length, props.downVoters.length)

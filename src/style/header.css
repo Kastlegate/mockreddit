@@ -29,3 +29,7 @@
     margin: auto .5em auto .5em;
     white-space:nowrap;
 }
+
+.headerSelect{
+    border: none;
+}
