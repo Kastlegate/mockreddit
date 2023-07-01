@@ -123,11 +123,10 @@ useEffect(() => {
         <div id='addToBottomLeft'>
             <div id="logo"><Link to={"/"} className='logoText'>mockit</Link> <Link   to={"/m/" + subMockit } className='logoSubText'>{logoSubText}</Link></div>
             <ul id="sortMenu">
-                <div className='sortChoiceSelected'>hot</div>
-                <a className='sortChoice'>new</a>
-                <a className='sortChoice'>rising</a>
-                <a className='sortChoice'>controversial</a>
-                <a className='sortChoice'>top</a>
+                <div className='sortChoiceSelected'>new</div>
+                <div className='sortChoice'>best</div>
+                <div className='sortChoice'>all</div>
+
             </ul>
         </div>
         <div id='addToBottomRight'>

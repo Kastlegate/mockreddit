@@ -4,6 +4,7 @@ import { app, db, auth, } from '../firebase/firebase-config'
 import { addDoc, collection, getDocs, getDoc, setDoc, doc, exists } from 'firebase/firestore'
 import { votesTotal } from './moreFunctions'
 import '../style/createSubMockitMenu.css';
+import { useNavigate } from 'react-router-dom'
 
 function CreateNewLinkMenu(props) {
 
@@ -11,6 +12,8 @@ function CreateNewLinkMenu(props) {
     const [linkAddress, setlinkAddress] = useState('')
     const [threadTitle, setthreadTitle] = useState('')
     const [postTo, setpostTo] = useState(null)
+    const navigate = useNavigate();
+    
 
     const showMainContent = () =>{
         let mainContent = document.querySelector('.SubMockitThread')
@@ -70,11 +73,19 @@ submockitNamer()
                                 subMockItName: postTo,
                                 commentsTotal: 0,
                                 voteScore: votesTotal(1, 0)
+                            }).then(function(docRef) {
+                                console.log("posted!");
+                                showMainContent()
+                                navigate("/m/" + postTo + "/" + docRef.id + "/" + "comments")
+                            })
+                            .catch(function(error) {
+                                console.error("Error adding document: ", error);
                             });
+                            
                        
-                        
-                            console.log("posted!");
-                            showMainContent()
+
+                            
+                            
                         }
                         else{
                             console.log("broke it!")

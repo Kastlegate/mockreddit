@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { app, db, auth, } from '../firebase/firebase-config'
 import { onSnapshot, collection, getDocs, getDoc, setDoc, doc, exists } from 'firebase/firestore'
 import '../style/createSubMockitMenu.css';
+import { useNavigate } from 'react-router-dom'
 
 function CreateSubMockitMenu(props) {
 
@@ -9,6 +10,8 @@ function CreateSubMockitMenu(props) {
     const [subMockItName, setSubMockitName] = useState('')
     const [subMockitTitle, setSubMockItTitle] = useState('')
     const [sidebar, setSideBar] = useState('')
+    const navigate = useNavigate();
+  
 
     const showMainContent = () =>{
         let mainContent = document.querySelector('.SubMockitThread')
@@ -32,16 +35,15 @@ function CreateSubMockitMenu(props) {
                         sidebar: sidebar,
                         moderators: [auth.currentUser.uid],
                         subscribers: [],
-                        admin: auth.currentUser.uid
-                        
+                        admin: auth.currentUser.uid                        
                   })
-
-
+                  navigate("/m/" + subMockItName)
             }
           })
 
 
         showMainContent()
+      
     } 
 
 // creates a useEffect that checks to see if a click has occurred outside the form

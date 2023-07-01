@@ -149,7 +149,7 @@ useEffect (() => {
 
       <div id="mockItMenu" >
         <div id='mockItMenuContainer'>
-          <input type="text" id="mockItSearch" placeholder="search" ></input>
+          {/* <input type="text" id="mockItSearch" placeholder="search" ></input> */}
           <button className='mockItButton' onClick={(e) => createNewLinkHandler(e)}>Submit a new link</button>
           {/* self text post to be added */}
           {/* <button className='mockItButton'>Submit a new text post</button> */}

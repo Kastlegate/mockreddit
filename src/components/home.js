@@ -58,7 +58,7 @@ const getCollectionRef = (ref) => {
 
             let newUpdater = []
             setLoading(false)
-            newUpdater = sortMostUpvotes(updater, newUpdater)
+            newUpdater = sortTimeNewest(updater, newUpdater)
           setThreads([...newUpdater])
           setGetLastDoc(snapShot.docs[snapShot.docs.length -1])
           setFirstDoc(snapShot.docs[0])
@@ -92,7 +92,7 @@ const getNextThreads = () => {
   
   const user = auth.currentUser;
   if(user){
-    const nextcollectionRef = query(collectionGroup(db, "threads"), where("subMockItName", "in", subbedMockits ), orderBy("voteScore", 'desc'),  startAfter(getLastDoc || 0), limit(25));
+    const nextcollectionRef = query(collectionGroup(db, "threads"), where("subMockItName", "in", subbedMockits ), orderBy("postedAt", 'desc'),  startAfter(getLastDoc || 0), limit(25));
       if(getLastDoc){
       getCollectionRef(nextcollectionRef)  
   }
@@ -101,7 +101,7 @@ const getNextThreads = () => {
   else{
       
   const nextcollectionRef = query(collectionGroup(db, "threads"),
-    orderBy("voteScore", 'desc'), 
+    orderBy("postedAt", 'desc'), 
     startAfter(getLastDoc || 0), limit(25));
   // const collectionRef = query(collectionGroup(db, "threads"), orderBy("postedAt", 'desc'), limit(15))
 
@@ -135,7 +135,7 @@ useEffect(() => {
               getCollectionRef(collectionRef)
             }
             else{
-              const collectionRef = query(collectionGroup(db, "threads"),  orderBy("voteScore", 'desc'), limit(25));
+              const collectionRef = query(collectionGroup(db, "threads"),  orderBy("postedAt", 'desc'), limit(25));
               getCollectionRef(collectionRef)
             }
 
