@@ -45,7 +45,12 @@ function Header(props) {
     if(currentUser){
       getDoc(doc(db, 'users', currentUser.uid)).then(userdocSnap => { 
         
-        setListOfsubscribedSubmockits([...userdocSnap.data().subcribedSubMockits])
+        if(userdocSnap.data().subcribedSubMockits){
+          setListOfsubscribedSubmockits([...userdocSnap.data().subcribedSubMockits])
+        }
+        else{
+          setListOfsubscribedSubmockits(["movies", 'tvshows', 'videogames', 'politics', 'pics', 'zelda', 'mario'])
+        }
   
       })
     }
@@ -59,7 +64,7 @@ function Header(props) {
       <div id="header" >
         
        <select className='headerSelect' value="My submockits" onChange={(e) => {selectHandler(e.target.value)}} id="subMockItsPullDown">
-        <option  disabled>My submockits</option>
+        <option hidden disabled>My submockits</option>
         {listOfsubscribedSubmockits.map((subMockit) => {
                   return (
                      

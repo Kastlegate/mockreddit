@@ -128,9 +128,18 @@ useEffect(() => {
         
         getDoc(doc(db, 'users', currentuser.uid)).then(docSnap => {
           if (docSnap.exists()) {
-            setSubbedMockits(docSnap.data().subcribedSubMockits)
+
+            if(docSnap.data().subcribedSubMockits.length > 0){
+              setSubbedMockits(docSnap.data().subcribedSubMockits)
               const collectionRef = query(collectionGroup(db, "threads"), where("subMockItName", "in", docSnap.data().subcribedSubMockits ), orderBy("voteScore", 'desc'), limit(25))
               getCollectionRef(collectionRef)
+            }
+            else{
+              const collectionRef = query(collectionGroup(db, "threads"),  orderBy("voteScore", 'desc'), limit(25));
+              getCollectionRef(collectionRef)
+            }
+
+
               
           } else {
             console.log("no user")
