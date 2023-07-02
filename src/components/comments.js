@@ -3,7 +3,7 @@ import MockItMenu from './/mockItMenu.js'
 import SubMockitThread from './Threads.js';
 import { db, auth } from '../firebase/firebase-config'
 import CommentTemplate from './commentTemplate.js';
-import { onSnapshot, collection, updateDoc, arrayUnion, useCollectionData, getDocs, getDoc, setDoc, doc, exists, addDoc } from 'firebase/firestore'
+import { onSnapshot, collection, updateDoc, serverTimestamp, getDocs, getDoc, query, doc, orderBy, addDoc } from 'firebase/firestore'
 import '../style/comments.css';
 import { useEffect, useState } from 'react';
 import UserNavBar from './/userNavBar.js'
@@ -24,6 +24,7 @@ const [sideBar, setSideBar] = useState('')
 const [ subMockitSubText, setSubMockitSubText] = useState('')
 const [resetColor, setResetColor] = useState(1)
 const [resetName, setResetName] = useState(1)
+const [sortValue, setSortValue] = useState('timestamp') 
 
 
 const votesTotal = (upvotes, downvotes) => {
@@ -59,7 +60,8 @@ const votesTotal = (upvotes, downvotes) => {
                                         parent: element.data().parent,
                                         upVoters: element.data().upVoters,
                                         downVoters: element.data().downVoters,
-                                        commentPath: element.ref.path
+                                        commentPath: element.ref.path,
+                                        timestamp: getLengthOfTimeSincePosted(element.data().timestamp),
                                     } 
                                      
                                         parentRepliesArray.push(newComment)
@@ -95,7 +97,7 @@ const votesTotal = (upvotes, downvotes) => {
  
 const getComments = () =>{
 
-    const collectionRef = collection(db, "subMockIts", subMockit, 'threads', thread, 'comments');
+    const collectionRef = query(collection(db, "subMockIts", subMockit, 'threads', thread, 'comments'), orderBy(sortValue, 'desc'));
     //getdocs to get all of the comments in the thread's comments collection
     getDocs(collectionRef).then((snapShot) => {
         const updater = []
@@ -116,7 +118,8 @@ const getComments = () =>{
                         parent: thread.data().parent,
                         upVoters: thread.data().upVoters,
                         downVoters: thread.data().downVoters,
-                        commentPath: thread.ref.path
+                        commentPath: thread.ref.path,
+                        timestamp: getLengthOfTimeSincePosted(thread.data().timestamp),
                        }
                        const subcollectionRef = thread.ref.path + '/comments';
                     //    console.log(newComment.commentPath)
@@ -173,7 +176,8 @@ const handleSubmit = (e) =>{
                     thread: thread,
                     linkText: currentThread.linkText,
                     linkAddress: currentThread.linkAddress,
-                    voteScore: votesTotal(1, 0)
+                    voteScore: votesTotal(1, 0),
+                    timestamp: serverTimestamp()
                 });
                                 })
 
@@ -218,7 +222,8 @@ const handleReply = (e, value, path) => {
                 thread: thread,
                 linkText: currentThread.linkText,
                 linkAddress: currentThread.linkAddress,
-                voteScore: votesTotal(1, 0)                    
+                voteScore: votesTotal(1, 0),
+                timestamp: serverTimestamp(),                    
             })
         
                     // updates the number of comments on the thread
@@ -278,7 +283,7 @@ useEffect (() => {
       })
     
 
-    getComments()
+    
 
     getDoc(doc(db, 'subMockIts', subMockit, 'threads', thread)).then(docSnap => {
         //if to make sure the submockit does not already exist
@@ -312,11 +317,17 @@ useEffect (() => {
       
 }, [])
 
+useEffect (() => {
+
+    getComments()
+ 
+      
+}, [sortValue])
 
 
     return (
         <div><Header />
-            <UserNavBar subText={subMockitSubText}/>
+            <UserNavBar sort={setSortValue} subText={subMockitSubText}/>
     <div id="mainContent" > 
         <div className='SubMockitThread' margin-left="5px">
             <SubMockitThread id={currentThread.id} linkAddress={currentThread.linkAddress} linkText={currentThread.linkText} postedAt={currentThread.postedAt} user={currentThread.postedBy} path={currentThread.threadPath} upVoters={currentThread.upVoters} downVoters={currentThread.downVoters} resetColor={resetColor} resetName={resetName} subMockItName={currentThread.subMockItName} commentsTotal = {commentsCount} votesTotal={currentThread.votesTotal} />

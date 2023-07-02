@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { app, db, auth, } from '../firebase/firebase-config'
-import { addDoc, collection, getDocs, getDoc, setDoc, doc, exists, Timestamp } from 'firebase/firestore'
+import { addDoc, collection, getDocs, getDoc, setDoc, doc, exists, Timestamp, serverTimestamp } from 'firebase/firestore'
 import { votesTotal } from './moreFunctions'
 import '../style/createSubMockitMenu.css';
 import { useNavigate } from 'react-router-dom'
@@ -73,7 +73,7 @@ submockitNamer()
                                 subMockItName: postTo,
                                 commentsTotal: 0,
                                 voteScore: votesTotal(1, 0),
-                                timestamp: Timestamp,
+                                timestamp: serverTimestamp(),
 
                             }).then(function(docRef) {
                                 console.log("posted!");

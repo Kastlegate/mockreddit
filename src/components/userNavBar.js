@@ -20,43 +20,71 @@ function UserNavBar(props) {
   const { subMockit } = useParams()
   const [ logoSubText, setlogoSubText ] = useState('');
   const [currentLogo, setCurrentLogo] = useState('')
+
   const setSortOrder = (e) =>{
 
     let newStyle = document.getElementById('timestamp')
     let bestStyle = document.getElementById('voteScore')
     let allStyle = document.getElementById('all')
-
-    if(e.target.id === 'timestamp'){
-      props.loadAll(false)
-      props.sort(e.target.id)
-      bestStyle.classList = ''
-      bestStyle.className = 'sortChoice'
-      newStyle.classList = ''
-      newStyle.className = 'sortChoiceSelected'
-      allStyle.classList = ''
-      allStyle.className = 'sortChoice'
-
+    
+    // if else to check if the loadall prop was passed down
+    if(props.loadAll){
+      if(e.target.id === 'timestamp'){
+        props.loadAll(false)
+        props.sort(e.target.id)
+        bestStyle.classList = ''
+        bestStyle.className = 'sortChoice'
+        newStyle.classList = ''
+        newStyle.className = 'sortChoiceSelected'
+        allStyle.classList = ''
+        allStyle.className = 'sortChoice'
+  
+      }
+      else if(e.target.id === 'voteScore'){
+        props.loadAll(false)
+        props.sort(e.target.id)
+        bestStyle.classList = ''
+        bestStyle.className = 'sortChoiceSelected'
+        newStyle.classList = ''
+        newStyle.className = 'sortChoice'
+        allStyle.classList = ''
+        allStyle.className = 'sortChoice'
+        
+  
+      }
+      else if(e.target.id === 'all'){
+        props.loadAll(true)
+        bestStyle.classList = ''
+        bestStyle.className = 'sortChoice'
+        newStyle.classList = ''
+        newStyle.className = 'sortChoice'
+        allStyle.classList = ''
+        allStyle.className = 'sortChoiceSelected'
+      }
     }
-    else if(e.target.id === 'voteScore'){
-      props.loadAll(false)
-      props.sort(e.target.id)
-      bestStyle.classList = ''
-      bestStyle.className = 'sortChoiceSelected'
-      newStyle.classList = ''
-      newStyle.className = 'sortChoice'
-      allStyle.classList = ''
-      allStyle.className = 'sortChoice'
-      
+    else{
+      if(e.target.id === 'timestamp'){
+        
+        props.sort(e.target.id)
+        bestStyle.classList = ''
+        bestStyle.className = 'sortChoice'
+        newStyle.classList = ''
+        newStyle.className = 'sortChoiceSelected'
 
-    }
-    else if(e.target.id === 'all'){
-      props.loadAll(true)
-      bestStyle.classList = ''
-      bestStyle.className = 'sortChoice'
-      newStyle.classList = ''
-      newStyle.className = 'sortChoice'
-      allStyle.classList = ''
-      allStyle.className = 'sortChoiceSelected'
+  
+      }
+      else if(e.target.id === 'voteScore'){
+       
+        props.sort(e.target.id)
+        bestStyle.classList = ''
+        bestStyle.className = 'sortChoiceSelected'
+        newStyle.classList = ''
+        newStyle.className = 'sortChoice'
+
+        
+  
+      }
+
     }
     
     

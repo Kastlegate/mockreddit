@@ -3,7 +3,7 @@ import MockItMenu from './/mockItMenu.js'
 import SubMockitThread from './Threads.js';
 import { db } from '../firebase/firebase-config'
 import UserNavBar from './/userNavBar.js'
-import { onSnapshot, collection, useCollectionData, getDocs, getDoc, setDoc, doc, exists, limit, limitToLast, endBefore, query, orderBy, startAt, startAfter } from 'firebase/firestore'
+import { onSnapshot, collection, getDocs, getDoc, setDoc, doc, exists, limit, limitToLast, endBefore, query, orderBy, startAt, startAfter } from 'firebase/firestore'
 import { useEffect, useState } from 'react';
 import Header from './header.js'
 import { getLengthOfTimeSincePosted, votesTotal } from './moreFunctions.js'
@@ -18,6 +18,8 @@ function SubMockit(props) {
     const [ subMockitSubText, setSubMockitSubText] = useState('')
     const [getLastDoc, setGetLastDoc] = useState(null)
     const [getFirstDoc, setFirstDoc] = useState(null)
+    const [sortValue, setSortValue] = useState('timestamp') 
+    
     
 
     const getCollectionRef = (ref) =>{
@@ -41,6 +43,7 @@ function SubMockit(props) {
                             downVoters: thread.data().downVoters,
                             id: thread.id,
                             threadPath: thread.ref.path,
+                            timestamp: getLengthOfTimeSincePosted(thread.data().timestamp),
                         }
                         updater.push(newThread)
                       
@@ -65,14 +68,14 @@ function SubMockit(props) {
    
     }  
 const getPrevThreads = () =>{
-    const prevcollectionRef = query(collection(db, "subMockIts", subMockit, 'threads'),  orderBy("postedAt"), endBefore(getFirstDoc), limitToLast(25));
+    const prevcollectionRef = query(collection(db, "subMockIts", subMockit, 'threads'),  orderBy(sortValue, 'desc'), endBefore(getFirstDoc), limitToLast(25));
  
     getCollectionRef(prevcollectionRef)  
     
 }
 
 const getNextThreads = () => {
-    const nextcollectionRef = query(collection(db, "subMockIts", subMockit, 'threads'),  orderBy("postedAt"), startAfter(getLastDoc || 0), limit(25));
+    const nextcollectionRef = query(collection(db, "subMockIts", subMockit, 'threads'),  orderBy(sortValue, 'desc'), startAfter(getLastDoc || 0), limit(25));
 
     if(getLastDoc){
         getCollectionRef(nextcollectionRef)  
@@ -80,7 +83,7 @@ const getNextThreads = () => {
 }
      
 useEffect (() => {
-    const collectionRef = query(collection(db, "subMockIts", subMockit, 'threads'), orderBy("postedAt"),  limit(25));
+    const collectionRef = query(collection(db, "subMockIts", subMockit, 'threads'), orderBy(sortValue, 'desc'),  limit(25));
 
     getCollectionRef(collectionRef)
 
@@ -98,14 +101,14 @@ useEffect (() => {
         }
         })
 
-}, [subMockit])
+}, [subMockit, sortValue])
 
 
    
     return (
         <div>
             <Header />
-            <UserNavBar subText={subMockitSubText}/>
+            <UserNavBar sort={setSortValue} subText={subMockitSubText}/>
     <div id="mainContent" >  
         <div className='SubMockitThread'>{subMockitInfo.map((thread) => {
                       return (
