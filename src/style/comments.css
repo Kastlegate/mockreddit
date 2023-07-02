@@ -27,19 +27,25 @@
 }
 
 .repliesContainer{
-    border-left: solid 1px;
+    border-left: solid .5px  transparent;
     /* border-bottom: solid 1px; */
     border-color: rgb(151, 148, 144);
-    margin-bottom: 5px;
+    margin-top: 15px;
+    /* border-top: solid .1px; */
+    padding-left: 8px;
 }
 
 .parentComment{
+    /* border-left: .5px solid transparent; */
     margin-top: 20px;
-    border-top: solid 1px;
+    /* border-top: solid 1px; */
     padding-top: 10px;
     border-color: rgb(167, 164, 159);
+    /* padding-left: 8px; */
+    
 }
 
 .commentUserName{
     text-decoration: none;
 }
+

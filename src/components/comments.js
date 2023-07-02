@@ -246,12 +246,12 @@ const addRepliesToComment = (nestedCommentReplies, counter) =>{
      
        
         
-        return <div className='repliesContainer' >{nestedCommentReplies.map((thisReply) => {
+        return <div className='repliesContainer'  style={{margin: 0 + "px " + 0 + "px " + 0 + "px " + 20 + "px "}}>{nestedCommentReplies.map((thisReply) => {
             
             
-            
+           
             return (
-                <div key={thisReply.id} style={{margin: 0 + "px " + 0 + "px " + 0 + "px " + 15 + "px "}} >
+                <div key={thisReply.id}  >
                  <div > 
                 <CommentTemplate id={thisReply.id} postedAt={thisReply.postedAt} user={thisReply.postedBy} totalVotes={thisReply.totalVotes} comment={thisReply.comment}  downVoters={thisReply.downVoters}  upVoters={thisReply.upVoters} path={thisReply.commentPath} handleReplySubmit={handleReply} /> </div>               
               
