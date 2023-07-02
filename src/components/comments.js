@@ -16,6 +16,7 @@ const { thread } = useParams()
 const { subMockit } = useParams()
 const [currentThread, setCurrentThread] = useState({upVoters:[], downVoters: [], linkAddress: 'https://mockreddit-22590.web.app/'})
 const [threadComments, setThreadComments] = useState([])
+const [updatedThreadComments, setUpdatedThreadComments] = useState([])
 const [newCommentBox, setNewCommentBox] = useState('')
 const [commentStateUpdater, setCommentStateUpdater] = useState(false)
 const [commentsCount, setCommentsCount] = useState(0)
@@ -24,7 +25,8 @@ const [sideBar, setSideBar] = useState('')
 const [ subMockitSubText, setSubMockitSubText] = useState('')
 const [resetColor, setResetColor] = useState(1)
 const [resetName, setResetName] = useState(1)
-const [sortValue, setSortValue] = useState('timestamp') 
+const [sortValue, setSortValue] = useState('timestamp')
+
 
 
 const votesTotal = (upvotes, downvotes) => {
@@ -156,6 +158,7 @@ const getComments = () =>{
 
 const handleSubmit = (e) =>{
     e.preventDefault()
+    let updater = [];
     // checking for a user before handling the submit
     const user = auth.currentUser;
     if(user){
@@ -164,28 +167,31 @@ const handleSubmit = (e) =>{
                getDoc(doc(db, 'users', user.uid)).then(docSnap => {
                                 //adds the comment to the current thread's comments
                 const docRef = addDoc(collection(db, "subMockIts", subMockit, 'threads', thread, 'comments'), {
-                    comment: newCommentBox,
-                    postedAt: Date(),
-                    postedBy: docSnap.data().userName,
-                    postedById: user.uid,
-                    children: [],
-                    parent: "",
-                    upVoters: [user.uid],
-                    downVoters: [],
-                    postedTo: subMockit,
-                    thread: thread,
-                    linkText: currentThread.linkText,
-                    linkAddress: currentThread.linkAddress,
-                    voteScore: votesTotal(1, 0),
-                    timestamp: serverTimestamp()
-                });
-                                })
+                        comment: newCommentBox,
+                        postedAt: Date(),
+                        postedBy: docSnap.data().userName,
+                        postedById: user.uid,
+                        children: [],
+                        parent: "",
+                        upVoters: [user.uid],
+                        downVoters: [],
+                        postedTo: subMockit,
+                        thread: thread,
+                        linkText: currentThread.linkText,
+                        linkAddress: currentThread.linkAddress,
+                        voteScore: votesTotal(1, 0),
+                        timestamp: serverTimestamp()
+                    });
+                })
 
 
             updateDoc(doc(db, 'subMockIts', subMockit, 'threads', thread), {
                 commentsTotal: commentsCount + 1
                 })
                 setCommentsCount(commentsCount + 1)
+                updater = [...threadComments]
+                setThreadComments([...updater])
+
             getComments()
             setNewCommentBox('')
             // setNewCommentAdded(true)
@@ -242,7 +248,7 @@ const handleReply = (e, value, path) => {
 // takes the child arrays from the parent comment and populates the children to the parent at render
 const addRepliesToComment = (nestedCommentReplies, counter) =>{
     
-     let count = counter;
+    
      
        
         
@@ -255,7 +261,7 @@ const addRepliesToComment = (nestedCommentReplies, counter) =>{
                  <div > 
                 <CommentTemplate id={thisReply.id} postedAt={thisReply.postedAt} user={thisReply.postedBy} totalVotes={thisReply.totalVotes} comment={thisReply.comment}  downVoters={thisReply.downVoters}  upVoters={thisReply.upVoters} path={thisReply.commentPath} handleReplySubmit={handleReply} /> </div>               
               
-                {addRepliesToComment(thisReply.replies, count)}</div>
+                {addRepliesToComment(thisReply.replies)}</div>
     
               
                 )
@@ -339,7 +345,7 @@ useEffect (() => {
                 <textarea type='textArea' className='commentTextArea' placeholder='Make a new comment' value={newCommentBox} onChange={(e) => { setNewCommentBox(e.target.value)}}></textarea>
                 <button className='newCommentButton'>save</button>
             </form>
-            <div>{threadComments.map((comments) => {
+            <div id="threadComments">{threadComments.map((comments) => {
 
                       return (
                         <div key={comments.id}  className='parentComment'>
