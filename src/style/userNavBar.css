@@ -55,6 +55,7 @@
     padding: 5px 5px 0px 5px;
     background-color: rgb(239, 250, 255);
     color: rgb(71, 94, 116);
+    cursor: pointer;
 }
 
 .sortChoiceSelected{
@@ -69,7 +70,7 @@
     border-left: solid;
     border-right: solid;
     border-color: black;
-
+    cursor: pointer;
 }
 
 #addToBottomRight{

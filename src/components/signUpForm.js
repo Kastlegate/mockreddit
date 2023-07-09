@@ -39,7 +39,8 @@ function SignUpForm(props) {
           })
         //   creates the new user, with the auth uid, and gives the firestore document field for username
           setDoc(doc(db, 'users', id), {
-            userName: userName
+            userName: userName,
+            subcribedSubMockits: [],
           })
         
     }

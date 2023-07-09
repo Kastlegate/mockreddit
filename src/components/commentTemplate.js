@@ -203,11 +203,11 @@ function CommentTemplate(props) {
             </div>
             <div className='commentText'>{props.comment}</div>
             <div className='commentFooter'>            
-                <div className='footerItem'>permalink</div>
+                {/* <div className='footerItem'>permalink</div>
                 <div className='footerItem'>embed</div>
                 <div className='footerItem'>save</div>
                 <div className='footerItem'>parent</div>
-                <div className='footerItem'>report</div>
+                <div className='footerItem'>report</div> */}
                 <div className='footerItemReply' replydataset={props.id} onClick={handleReply}>reply</div>      
                 </div>
                 <form  className='replyForm' value={replyCommentBox}  formreplydataset={props.id} data-formid={props.id}  onSubmit={handleThisReplySubmit}>

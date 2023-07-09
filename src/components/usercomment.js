@@ -166,12 +166,12 @@ function UserComments(props) {
             </div>
             <div className='commentText'>{props.comment}</div>
             <div className='commentFooter'>            
-                <div className='footerItem'>permalink</div>
+                {/* <div className='footerItem'>permalink</div> */}
                 <Link className='footerItem' to={"/m/" + props.postedTo + "/" + props.postedToThread + "/comments" }>full comments</Link>
-                <div className='footerItem'>embed</div>
+                {/* <div className='footerItem'>embed</div>
                 <div className='footerItem'>save</div>
                 <div className='footerItem'>parent</div>
-                <div className='footerItem'>report</div>    
+                <div className='footerItem'>report</div>     */}
                 </div>
                 
         </div>

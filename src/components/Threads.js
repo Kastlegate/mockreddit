@@ -207,7 +207,7 @@ function SubMockitThread(props) {
         </div>
 
         <div className='commentsAndSharing'>
-            {props.commentsTotal} <Link to={"/m/" + props.subMockItName + "/" + props.id + "/comments"} className='subMockItLink'  > comments</Link> share save hide
+            {props.commentsTotal} <Link to={"/m/" + props.subMockItName + "/" + props.id + "/comments"} className='subMockItLink'  > comments</Link> {/*share save hide */}
         </div>
       </div>
     </div>
