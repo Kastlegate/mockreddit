@@ -211,7 +211,7 @@ function CommentTemplate(props) {
                 <div className='footerItemReply' replydataset={props.id} onClick={handleReply}>reply</div>      
                 </div>
                 <form  className='replyForm' value={replyCommentBox}  formreplydataset={props.id} data-formid={props.id}  onSubmit={handleThisReplySubmit}>
-                <textarea type='textArea' className='commentTextArea' placeholder='Reply to a comment' value={replyCommentBox} onChange={(e) => { setReplyCommentBox(e.target.value)}}></textarea>
+                <textarea type='textArea' maxlength='2000' className='commentTextArea' placeholder='Reply to a comment' value={replyCommentBox} onChange={(e) => { setReplyCommentBox(e.target.value)}}></textarea>
                 <div className='replyButtonContainer'>
                     <button type='submit' name='action' className='replyButton' value='submit'>save</button>
                     <button type='button' className='replyButton' formreplydataset={props.id} data-formid={props.id} onClick={handleCancelSubmit}>cancel</button>

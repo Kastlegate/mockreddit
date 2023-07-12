@@ -75,17 +75,17 @@ useEffect(() => {
             <label className='createSubMockitFormItems'>
                 <div className='createSubmockItText'>Name</div>
                 <div className='createSubmockItSubText'> no spaces, e.g., "books" or "bookclub". avoid using solely trademarked names, e.g. use "FansOfAcme" instead of "Acme". once chosen, this name cannot be changed.</div>
-                <input required type='text' className='createSubMockitForm' onChange={(e) => { setSubMockitName(e.target.value)}}></input>
+                <input required type='text'  maxlength='50' className='createSubMockitForm' onChange={(e) => { setSubMockitName(e.target.value)}}></input>
             </label>
             <label className='createSubMockitFormItems'>
                 <div className='createSubmockItText'>Title</div>
                 <div className='createSubmockItSubText'>e.g., books: made from trees or pixels. recommendations, news, or thoughts</div>
-                <input required type='text' className='createSubMockitForm' onChange={(e) => { setSubMockItTitle(e.target.value)}}></input>
+                <input required type='text'  maxlength='50' className='createSubMockitForm' onChange={(e) => { setSubMockItTitle(e.target.value)}}></input>
             </label>
             <label className='createSubMockitFormItems'>
                 <div className='createSubmockItText'>Side Bar</div>
                 <div className='createSubmockItSubText'>shown in the sidebar of your submockit.</div>
-                <input required type='text' className='createSubMockitForm' onChange={(e) => { setSideBar(e.target.value)}}></input>
+                <input required type='text'  maxlength='2000' className='createSubMockitForm' onChange={(e) => { setSideBar(e.target.value)}}></input>
             </label>
             <input className='submitButton' type="submit" value="create" ></input>
         </form>

@@ -128,7 +128,7 @@ function SignUpForm(props) {
 
             {switchToSignIn ? <label className='formText'>
                 <div>ENTER USERNAME</div>
-                <input type="text" required placeholder='enter a username' value={userName} onChange={(e) => setUserName(e.target.value)} className='signUpFormInput'></input>
+                <input type="text" required  maxlength='100' placeholder='enter a username' value={userName} onChange={(e) => setUserName(e.target.value)} className='signUpFormInput'></input>
             </label> : null}
 
             <label className='formText'>

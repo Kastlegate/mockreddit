@@ -36,6 +36,8 @@
 
 .commentText{
     margin-top: 5px;
+    max-width: 60em;
+    word-wrap: break-word;
 }
 
 .commentFooter{

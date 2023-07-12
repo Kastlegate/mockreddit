@@ -342,7 +342,7 @@ useEffect (() => {
             <div className='divider'></div>
             <div className='sortText'>sorted by: best</div>
             <form className='newCommentForm' onSubmit={(e) => handleSubmit(e)}>
-                <textarea type='textArea' className='commentTextArea' placeholder='Make a new comment' value={newCommentBox} onChange={(e) => { setNewCommentBox(e.target.value)}}></textarea>
+                <textarea type='textArea' className='commentTextArea' maxlength='2000' placeholder='Make a new comment' value={newCommentBox} onChange={(e) => { setNewCommentBox(e.target.value)}}></textarea>
                 <button className='newCommentButton'>save</button>
             </form>
             <div id="threadComments">{threadComments.map((comments) => {
